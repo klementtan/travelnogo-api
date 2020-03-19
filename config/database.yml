@@ -48,8 +48,11 @@ test:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
 production:
-  url: mysql2://b6ee37593e073b:1dd850bd@us-cdbr-iron-east-04.cleardb.net/heroku_aac11f26cbd0647?reconnect=true
-  # <<: *default
-  # database: travelnogo_api_production
-  # username: travelnogo_api
-  # password: <%= ENV['TRAVELNOGO_API_DATABASE_PASSWORD'] %>
+  adapter: postgresql
+  encoding: unicode
+  # For details on connection pooling, see Rails configuration guide
+  # http://guides.rubyonrails.org/configuring.html#database-pooling
+  pool: <%= ENV.fetch("RAILS_MAX_THREADS") { 5 } %>
+  database: travelnogo_api_production
+  username: travelnogo
+  password: <%= ENV['TRAVELNOGO_DATABASE_PASSWORD'] %>
