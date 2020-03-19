@@ -69,6 +69,21 @@ class Api::V1::BansController < Api::V1::BaseController
     }
   end
 
+  def get_country_bannee
+    country = Country.find_by_code( params[:banner])
+    bans = Ban.where( banner: country)
+    bans_json = JSON.parse(bans.to_json)
+
+    bans_json.each { |ban|
+      bannee_id = ban["bannee_id"]
+      bannee_code = Country.find(bannee_id).code
+      ban["bannee_code"] = bannee_code
+    }
+    render json: {
+      bans: bans_json
+    }
+  end
+
   def get_ban
     banner = Country.find_by_code( params[:banner])
     bannee = Country.find_by_code( params[:bannee])
