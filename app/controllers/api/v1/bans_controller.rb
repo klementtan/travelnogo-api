@@ -87,6 +87,7 @@ class Api::V1::BansController < Api::V1::BaseController
   end
 
   def get_many_ban
+    
     banner = Country.find_by_code( params[:banner])
     bannees_code = params[:bannees].split(',')
     bans = []
