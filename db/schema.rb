@@ -10,7 +10,21 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 2020_03_19_061119) do
+ActiveRecord::Schema.define(version: 2020_03_21_151438) do
+
+  create_table "ban_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "ban_type"
+    t.string "ban_description"
+    t.string "ban_url"
+    t.bigint "banner_id"
+    t.bigint "bannee_id"
+    t.bigint "contributor_id"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
+    t.index ["bannee_id"], name: "index_ban_requests_on_bannee_id"
+    t.index ["banner_id"], name: "index_ban_requests_on_banner_id"
+    t.index ["contributor_id"], name: "index_ban_requests_on_contributor_id"
+  end
 
   create_table "bans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
     t.string "ban_type"
@@ -22,6 +36,13 @@ ActiveRecord::Schema.define(version: 2020_03_19_061119) do
     t.string "ban_url"
     t.index ["bannee_id"], name: "index_bans_on_bannee_id"
     t.index ["banner_id"], name: "index_bans_on_banner_id"
+  end
+
+  create_table "contributors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+    t.string "name"
+    t.string "email"
+    t.datetime "created_at", precision: 6, null: false
+    t.datetime "updated_at", precision: 6, null: false
   end
 
   create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
