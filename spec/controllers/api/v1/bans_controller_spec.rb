@@ -12,7 +12,7 @@ RSpec.describe 'Bans Controller', type: :request do
 
 
     it 'Create Ban' do
-      post '/api/v1/ban', params: {
+      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'], params: {
         "banner": "AL",
         "bannee": "CN",
         "ban_type": "FULL_BAN",
@@ -24,13 +24,13 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'Create Ban' do
-      post '/api/v1/ban', params: {
+      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'] , params: {
         "banner": "AL",
         "bannee": "CN",
         "ban_type": "FULL_BAN",
         "ban_description": "Individuals from China not allowed into the country"
       } 
-      post '/api/v1/ban', params: {
+      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'] , params: {
         "banner": "AL",
         "bannee": "CN",
         "ban_type": "HALF_BAN",
@@ -44,20 +44,20 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'Get Country Banner' do
-      post '/api/v1/ban', params: {
+      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'], params: {
         "banner": "AL",
         "bannee": "CN",
         "ban_type": "FULL_BAN",
         "ban_description": "Individuals from China not allowed into the country"
       } 
-      post '/api/v1/ban', params: {
+      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'], params: {
         "banner": "US",
         "bannee": "CN",
         "ban_type": "HALF_BAN",
         "ban_description": "Lorem Ipsum"
       } 
 
-      post '/api/v1/ban', params: {
+      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'], params: {
         "banner": "SG",
         "bannee": "CN",
         "ban_type": "HALF_BAN",
@@ -65,6 +65,7 @@ RSpec.describe 'Bans Controller', type: :request do
       } 
       get '/api/v1/ban/CN'
       bans = JSON.parse(response.body)["bans"]
+      byebug
       expect(bans[0]["banner_code"]).to eq("AL")
       expect(bans[1]["banner_code"]).to eq("US")
       expect(bans[2]["banner_code"]).to eq("SG")
@@ -72,7 +73,7 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'Get Banner' do
-      post '/api/v1/ban', params: {
+      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'], params: {
         "banner": "AL",
         "bannee": "CN",
         "ban_type": "FULL_BAN",
