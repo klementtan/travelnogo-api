@@ -1202,7 +1202,7 @@ raw_country_code = [
       "code":"VE"
    },
    {
-      "name":"Viet Nam",
+      "name":"Vietnam",
       "dial_code":"+84",
       "code":"VN"
    },
