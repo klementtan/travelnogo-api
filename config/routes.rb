@@ -10,7 +10,7 @@ Rails.application.routes.draw do
       get '/many_ban/:banner' => 'bans#get_many_ban'
       get '/bans' => 'bans#get_all_ban'
       
-      delete '/ban/:bannee/:banner' => 'bans#delete_ban'
+      delete '/ban/:bannees/:banner' => 'bans#delete_ban'
 
       post '/ban_request' => 'ban_requests#create'
       post '/contributor' => 'contributors#create'

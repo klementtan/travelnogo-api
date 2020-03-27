@@ -131,12 +131,17 @@ class Api::V1::BansController < Api::V1::BaseController
   def delete_ban
     authenticate
     banner = Country.find_by_code( params[:banner])
-    bannee = Country.find_by_code( params[:bannee])
-    ban = Ban.find_by( bannee: bannee, banner: banner)
-    raise ActiveRecord::RecordNotFound, "Ban does not exit" unless ban
-    Ban.destroy(ban.id)
+    bannees_code = params[:bannees].split(',')
+    deleted_bans = []
+    bannees_code.each { |bannee_code|
+      bannee = Country.find_by_code( bannee_code )
+      ban = Ban.find_by( bannee: bannee, banner: banner)
+      next unless ban
+      deleted_bans.push(ban)
+      Ban.destroy(ban.id)
+    }
     render json: {
-      message: "Ban deleted"
+      deleted_bans: deleted_bans
     }
   end
 
