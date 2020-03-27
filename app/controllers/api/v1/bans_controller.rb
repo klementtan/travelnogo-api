@@ -142,7 +142,6 @@ class Api::V1::BansController < Api::V1::BaseController
 
   def get_all_ban
     bans = Ban.all.order(:banner_id).reverse_order
-    byebug
     bans_json = JSON.parse(bans.to_json)
     bans_json.each {|ban|
       banner = Country.find( ban["banner_id"] )
