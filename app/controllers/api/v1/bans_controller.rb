@@ -33,6 +33,7 @@ class Api::V1::BansController < Api::V1::BaseController
     params[:bannee].each { |bannee_code|
       bannee = Country.find_by_code(bannee_code)
       ban = Ban.find_by(banner: banner, bannee: bannee)
+      next if banner == bannee
       unless ban 
         ban = Ban.create(:banner => banner, :bannee => bannee)
       end
@@ -56,7 +57,8 @@ class Api::V1::BansController < Api::V1::BaseController
 
   def get_country_banner
     country = Country.find_by_code( params[:bannee])
-    bans = Ban.where( bannee: country)
+    bans = Ban.where( bannee: country).order(:banner_id)
+    bans.order(:bannee)  
     bans_json = JSON.parse(bans.to_json)
 
     bans_json.each { |ban|
@@ -64,6 +66,7 @@ class Api::V1::BansController < Api::V1::BaseController
       banner_code = Country.find(banner_id).code
       ban["banner_code"] = banner_code
     }
+    bans_json
     render json: {
       bans: bans_json
     }
@@ -71,7 +74,7 @@ class Api::V1::BansController < Api::V1::BaseController
 
   def get_country_bannee
     country = Country.find_by_code( params[:banner])
-    bans = Ban.where( banner: country)
+    bans = Ban.where( banner: country).order(:bannee_id)
     bans_json = JSON.parse(bans.to_json)
 
     bans_json.each { |ban|
@@ -134,6 +137,13 @@ class Api::V1::BansController < Api::V1::BaseController
     Ban.destroy(ban.id)
     render json: {
       message: "Ban deleted"
+    }
+  end
+
+  def get_all_ban
+    bans = Ban.all.order(:updated_at).reverse_order
+    render json: {
+      bans: bans
     }
   end
 end
