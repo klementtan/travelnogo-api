@@ -141,13 +141,16 @@ class Api::V1::BansController < Api::V1::BaseController
   end
 
   def get_all_ban
-    bans = Ban.all.order(:updated_at).reverse_order
+    bans = Ban.all.order(:banner_id).reverse_order
+    byebug
     bans_json = JSON.parse(bans.to_json)
     bans_json.each {|ban|
-      bannee = Country.find( ban["banner_id"] )
-      banner = Country.find( ban["bannee_id"] )
+      banner = Country.find( ban["banner_id"] )
+      bannee = Country.find( ban["bannee_id"] )
       ban["banner_name"] = banner.country_name
+      ban["banner_code"] = banner.code
       ban["bannee_name"] = bannee.country_name
+      ban["bannee_code"] = bannee.code
     }
     render json: {
       bans: bans_json
