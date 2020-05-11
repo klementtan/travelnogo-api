@@ -12,7 +12,10 @@
 
 ActiveRecord::Schema.define(version: 2020_03_21_151438) do
 
-  create_table "ban_requests", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
+  create_table "ban_requests", force: :cascade do |t|
     t.string "ban_type"
     t.string "ban_description"
     t.string "ban_url"
@@ -26,7 +29,7 @@ ActiveRecord::Schema.define(version: 2020_03_21_151438) do
     t.index ["contributor_id"], name: "index_ban_requests_on_contributor_id"
   end
 
-  create_table "bans", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "bans", force: :cascade do |t|
     t.string "ban_type"
     t.string "ban_description"
     t.bigint "banner_id"
@@ -38,14 +41,14 @@ ActiveRecord::Schema.define(version: 2020_03_21_151438) do
     t.index ["banner_id"], name: "index_bans_on_banner_id"
   end
 
-  create_table "contributors", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci", force: :cascade do |t|
+  create_table "contributors", force: :cascade do |t|
     t.string "name"
     t.string "email"
     t.datetime "created_at", precision: 6, null: false
     t.datetime "updated_at", precision: 6, null: false
   end
 
-  create_table "countries", options: "ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci ROW_FORMAT=DYNAMIC", force: :cascade do |t|
+  create_table "countries", force: :cascade do |t|
     t.string "code"
     t.integer "level"
     t.datetime "created_at", precision: 6, null: false
