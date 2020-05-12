@@ -62,7 +62,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
     status = ScraperRequestStatus::PENDING_REVIEW
 
     if latest_similar_ban_req_status == ScraperRequestStatus::DONE
-      if ban_description = latest_similar_ban_req.ban_description
+      if ban_description == latest_similar_ban_req.ban_description
         status = ScraperRequestStatus::DONE
       end
     end
