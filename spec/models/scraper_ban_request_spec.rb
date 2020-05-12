@@ -6,7 +6,7 @@ RSpec.describe ScraperBanRequest, type: :model do
   it { should belong_to(:scraper_request) }
   it { should validate_presence_of(:ban_description) }
   it 'Should Initialize with default pending status' do
-    scraper_ban_request = ScraperBanRequest.create()
+    scraper_ban_request = ScraperBanRequest.create
     expect(scraper_ban_request.status).to eq(
       ScraperRequestStatus::PENDING_REVIEW
     )

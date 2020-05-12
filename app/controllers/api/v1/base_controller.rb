@@ -17,8 +17,8 @@ class Api::V1::BaseController < ActionController::Base
   def render_json_error(error)
     render json: {
              error: "#{error.record.class.name} record: #{error.message}"
-           }, # Bad Request
-           status: 400
+           },
+           status: 400 # Bad Request
   end
 
   def render_500_error(error)

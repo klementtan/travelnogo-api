@@ -4,5 +4,4 @@ class ScraperBanRequest < ApplicationRecord
   belongs_to :bannee, class_name: 'Country'
 
   validates_presence_of :ban_description, :published_date, :status
-
 end
