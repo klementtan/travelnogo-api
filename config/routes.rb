@@ -9,11 +9,13 @@ Rails.application.routes.draw do
       get '/ban/:bannee/:banner' => 'bans#get_ban'
       get '/many_ban/:banner' => 'bans#get_many_ban'
       get '/bans' => 'bans#get_all_ban'
-      
+
       delete '/ban/:bannees/:banner' => 'bans#delete_ban'
 
       post '/ban_request' => 'ban_requests#create'
       post '/contributor' => 'contributors#create'
+
+      post '/scraper/iata' => 'scrapers#create_iata_request'
     end
   end
 end
