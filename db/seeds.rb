@@ -293,6 +293,8 @@ raw_country_code = [
 ]
 
 raw_country_code.each do |country|
-  country = Country.create(country_name: country[:name], code: country[:code])
+  country = Country.create(country_name: country[:name], code: country[:code], all_countries: false)
   country.save!
 end
+
+all_country = Country.create(country_name: "ALL COUNTRY", code: "ALL", all_countries: true)

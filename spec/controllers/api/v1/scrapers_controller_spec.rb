@@ -1,4 +1,4 @@
 require 'rails_helper'
 
-RSpec.describe ScrapersController, type: :controller do
+RSpec.describe 'Scraper Controller', type: :request do
 end
