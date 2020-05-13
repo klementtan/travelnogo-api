@@ -21,6 +21,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
           published_date: published_date,
           status: status
         )
+
       else
         possible_bannees.each do |bannee_code|
           bannee = Country.find_by_code(bannee_code)
@@ -40,6 +41,11 @@ class Api::V1::ScrapersController < Api::V1::BaseController
     scrape_request.date = date
     scrape_request.save
     render json: scrape_request, serializer: ScraperRequestSerializer
+  end
+
+  def get_pending_review
+    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW)
+    render json: pending_reviews, each_serializer: ScraperBanRequestSerializer
   end
 
   #TODO find a better implementation for this

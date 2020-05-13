@@ -16,6 +16,7 @@ Rails.application.routes.draw do
       post '/contributor' => 'contributors#create'
 
       post '/scraper/iata' => 'scrapers#create_iata_request'
+      get '/scraper' => 'scrapers#get_pending_review'
     end
   end
 end

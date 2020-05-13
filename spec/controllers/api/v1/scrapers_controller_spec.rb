@@ -201,11 +201,87 @@ RSpec.describe 'Scraper Controller', type: :request do
             }
           }
         }
-
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::DONE).length).to eq(1)
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).length).to eq(1)
     end
-    
 
+    describe 'Get Pending Reviews' do
+      it 'Should return all the pending reviews' do
+        post '/api/v1/scraper/iata',
+          params: {
+            "date": '12.05.2020',
+            "scrape_data": {
+              "AFGHANISTAN": {
+                "ISO2": 'AF',
+                "published_date": '24.04.2020',
+                "possible_bannees": ["SG", "US", "CN"],
+                "info":
+                  "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+              }
+            }
+          }
+        get '/api/v1/scraper'
+        pending_review_arr = JSON.parse(response.body)
+        expect(pending_review_arr.length).to be(3)
+        
+        pending_review_sg = pending_review_arr[0]
+        expect(pending_review_sg["bannee"]["code"]).to eq("SG")
+        expect(pending_review_sg["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
+
+        pending_review_us = pending_review_arr[1]
+        expect(pending_review_us["bannee"]["code"]).to eq("US")
+        expect(pending_review_us["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
+
+        pending_review_cn = pending_review_arr[2]
+        expect(pending_review_cn["bannee"]["code"]).to eq("CN")
+        expect(pending_review_cn["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
+      end
+
+      it 'Should return all the pending reviews and filter out the other statuses' do
+        post '/api/v1/scraper/iata',
+          params: {
+            "date": '12.05.2020',
+            "scrape_data": {
+              "AFGHANISTAN": {
+                "ISO2": 'AF',
+                "published_date": '24.04.2020',
+                "possible_bannees": ["SG", "US", "CN"],
+                "info":
+                  "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+              }
+            }
+          }
+          ScraperBanRequest.find_by(banner: Country.find_by_code("AF"), bannee: Country.find_by_code("SG")).status = ScraperRequestStatus::DONE
+          post '/api/v1/scraper/iata',
+          params: {
+            "date": '12.05.2020',
+            "scrape_data": {
+              "AFGHANISTAN": {
+                "ISO2": 'AF',
+                "published_date": '24.04.2020',
+                "possible_bannees": ["SG", "US", "CN"],
+                "info":
+                  "Lorem Ipsum"
+              }
+            }
+          }
+        get '/api/v1/scraper'
+        pending_review_arr = JSON.parse(response.body)
+        expect(pending_review_arr.length).to be(3)
+        expect(ScraperBanRequest.all.length).to be(6)
+        
+        pending_review_sg = pending_review_arr[0]
+        expect(pending_review_sg["bannee"]["code"]).to eq("SG")
+        expect(pending_review_sg["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
+
+        pending_review_us = pending_review_arr[1]
+        expect(pending_review_us["bannee"]["code"]).to eq("US")
+        expect(pending_review_us["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
+
+        pending_review_cn = pending_review_arr[2]
+        expect(pending_review_cn["bannee"]["code"]).to eq("CN")
+        expect(pending_review_cn["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
+      end
+    end
   end
 end
