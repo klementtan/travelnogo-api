@@ -8,6 +8,7 @@ class Api::V1::BansController < Api::V1::BaseController
     ban.ban_type = params[:ban_type] if params[:ban_type]
     ban.ban_description = params[:ban_description] if params[:ban_description]
     ban.ban_url = params[:ban_url] if params[:ban_url]
+    set_scraper_ban_request_done(banner, bannee)
     ban.save
     render json: { status: 200, ban: ban }
   end
@@ -20,6 +21,7 @@ class Api::V1::BansController < Api::V1::BaseController
     bans = []
 
     params[:bannee].each do |bannee_code|
+      #update actual ban
       bannee = Country.find_by_code(bannee_code)
       ban = Ban.find_by(banner: banner, bannee: bannee)
       next if banner == bannee
@@ -29,6 +31,7 @@ class Api::V1::BansController < Api::V1::BaseController
       ban.ban_url = params[:ban_url] if params[:ban_url]
       ban.save
       bans.push(ban)
+      set_scraper_ban_request_done(banner, bannee)
     end
     render json: { status: 200, bans: bans }
   end
@@ -107,6 +110,7 @@ class Api::V1::BansController < Api::V1::BaseController
       next unless ban
       deleted_bans.push(ban)
       Ban.destroy(ban.id)
+      set_scraper_ban_request_done(banner, bannee)
     end
     render json: { deleted_bans: deleted_bans }
   end
@@ -123,5 +127,14 @@ class Api::V1::BansController < Api::V1::BaseController
       ban['bannee_code'] = bannee.code
     end
     render json: { bans: bans_json }
+  end
+
+  private
+  def set_scraper_ban_request_done(banner, bannee)
+    scraper_ban_request = ScraperBanRequest.find_by(banner: banner, bannee: bannee, status: ScraperRequestStatus::PENDING_REVIEW)
+    unless scraper_ban_request.nil?
+      scraper_ban_request.status = ScraperRequestStatus::DONE
+      scraper_ban_request.save
+    end
   end
 end

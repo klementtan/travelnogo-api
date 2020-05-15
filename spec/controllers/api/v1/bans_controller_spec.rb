@@ -2,6 +2,7 @@ require 'rails_helper'
 
 RSpec.describe 'Bans Controller', type: :request do
   before(:all) { Rails.application.load_seed }
+  before(:each) { ScraperRequest.destroy_all }
   describe 'Create Ban' do
     it 'Should Create new Ban' do
       post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
@@ -160,6 +161,33 @@ RSpec.describe 'Bans Controller', type: :request do
       expect(bans[0]['bannee_code']).to eq('CN')
       expect(bans[1]['bannee_code']).to eq('SG')
       expect(bans[2]['bannee_code']).to eq('US')
+    end
+  end
+
+  describe 'Integration test with scraper request' do
+    it 'Should Create new Ban' do
+      post '/api/v1/scraper/iata',
+        params: {
+          "date": '12.05.2020',
+          "scrape_data": {
+            "AFGHANISTAN": {
+              "ISO2": 'AF',
+              "published_date": '24.04.2020',
+              "possible_bannees": ['CN'],
+              "info":
+                "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+            }
+          }
+        }
+      post '/api/v1/many_ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+        params: {
+          "banner": 'AF',
+          "bannee": %w[CN],
+          "ban_type": 'FULL_BAN',
+          "ban_description":
+            'Individuals from CN US and SG not allowed into the country'
+        }
+      expect(ScraperBanRequest.find_by(banner: Country.find_by_code('AF'), bannee: Country.find_by_code('CN')).status).to eq(ScraperRequestStatus::DONE)
     end
   end
 end

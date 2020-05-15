@@ -5,27 +5,15 @@ class Api::V1::ScrapersController < Api::V1::BaseController
     scrape_request =
       ScraperRequest.create(source: ScraperSources::IATA, date: date)
     scrape_data.each do |country_name, country_info|
-      banner = Country.find_by_code(country_info['ISO2'])
-      ban_description = country_info['info']
-      published_date = Date.parse(country_info['published_date'])
-      possible_bannees = country_info['possible_bannees']
+      begin 
+        banner = Country.find_by_code(country_info['ISO2'])
+        ban_description = country_info['info']
+        published_date = Date.parse(country_info['published_date'])
+        possible_bannees = country_info['possible_bannees']
 
-      if possible_bannees.empty? ||
-           (possible_bannees.length == 1 && possible_bannees[0] == '')
-        bannee = Country.find_by(all_countries: true)
-        status = resolve_ban_request_status(banner, bannee, ban_description)
-        scrape_request.scraper_ban_requests.create!(
-          bannee: bannee,
-          banner: banner,
-          ban_description: ban_description,
-          published_date: published_date,
-          status: status
-        )
-
-      else
-        possible_bannees.each do |bannee_code|
-          bannee = Country.find_by_code(bannee_code)
-          resolve_ban_request_status(banner, bannee, ban_description)
+        if possible_bannees.empty? ||
+            (possible_bannees.length == 1 && possible_bannees[0] == '')
+          bannee = Country.find_by(all_countries: true)
           status = resolve_ban_request_status(banner, bannee, ban_description)
           scrape_request.scraper_ban_requests.create!(
             bannee: bannee,
@@ -34,8 +22,26 @@ class Api::V1::ScrapersController < Api::V1::BaseController
             published_date: published_date,
             status: status
           )
+
+        else
+          possible_bannees.each do |bannee_code|
+            bannee = Country.find_by_code(bannee_code)
+            resolve_ban_request_status(banner, bannee, ban_description)
+            status = resolve_ban_request_status(banner, bannee, ban_description)
+            scrape_request.scraper_ban_requests.create!(
+              bannee: bannee,
+              banner: banner,
+              ban_description: ban_description,
+              published_date: published_date,
+              status: status
+            )
+          end
         end
+      rescue Exception => e
+        byebug
       end
+
+
     end
 
     scrape_request.date = date
@@ -48,6 +54,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
     render json: pending_reviews, each_serializer: ScraperBanRequestSerializer
   end
 
+  private
   #TODO find a better implementation for this
   def resolve_ban_request_status(banner, bannee, ban_description)
     similar_ban_reqs =

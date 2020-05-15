@@ -2,10 +2,10 @@
 class Api::V1::BaseController < ActionController::Base
   skip_before_action :verify_authenticity_token
   helper_method :authenticate
-  # rescue_from Exception, with: :render_500_error
+  rescue_from Exception, with: :render_500_error
   rescue_from AuthenticationError, with: :render_404_error
-  rescue_from ActiveRecord::RecordNotFound, with: :render_404_error
-  rescue_from ActiveRecord::RecordInvalid, with: :render_json_error
+  # rescue_from ActiveRecord::RecordNotFound, with: :render_404_error
+  # rescue_from ActiveRecord::RecordInvalid, with: :render_json_error
 
   def authenticate
     key = params['X_TRAVELNOGO_KEY']
