@@ -17,6 +17,9 @@ Rails.application.routes.draw do
 
       post '/scraper/iata' => 'scrapers#create_iata_request'
       get '/scraper' => 'scrapers#get_pending_review'
+
+      post '/user/' => 'users#create_admin_user'
+      post '/user/firebase' => 'users#update_user_uuid'
     end
   end
 end

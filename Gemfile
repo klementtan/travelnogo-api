@@ -3,24 +3,32 @@ git_source(:github) { |repo| "https://github.com/#{repo}.git" }
 
 ruby '2.6.4'
 
-gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
-gem 'pg', '>= 0.18', '< 2.0'
-gem 'puma', '~> 4.1'
-gem 'dotenv-rails'
 gem 'active_model_serializers'
 gem 'bootsnap', '>= 1.4.2', require: false
+gem 'countries'
+gem 'dotenv-rails'
+gem 'jwt'
+gem 'pg', '>= 0.18', '< 2.0'
+gem 'puma', '~> 4.1'
+gem 'httparty'
 gem 'rack-cors'
+gem 'redis'
+gem 'whenever', require: false
+gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
+gem "rolify"
+gem 'firebase_id_token', '~> 2.4.0'
+
 
 group :development, :test do
-  gem 'rspec-rails', '~> 3.5'
   gem 'byebug', platforms: [:mri, :mingw, :x64_mingw]
+  gem 'rspec-rails', '~> 3.5'
 end
 
 group :test do
-  gem 'factory_bot_rails', '~> 4.0'
-  gem 'shoulda-matchers', '~> 3.1'
-  gem 'faker'
   gem 'database_cleaner'
+  gem 'factory_bot_rails', '~> 4.0'
+  gem 'faker'
+  gem 'shoulda-matchers', '~> 3.1'
 end
 
 group :development do
