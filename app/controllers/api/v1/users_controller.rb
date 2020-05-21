@@ -4,6 +4,7 @@ class Api::V1::UsersController < Api::V1::BaseController
   skip_before_action :authenticate, only: [:update_user_uuid]
 
   def update_user_uuid
+    byebug
     user_data = params['user']
     user_info_data = user_data['user_info']
     @user = User.find_by_email(user_info_data['email'])
