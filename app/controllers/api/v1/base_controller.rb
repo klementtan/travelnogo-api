@@ -8,10 +8,12 @@ class Api::V1::BaseController < ActionController::Base
   rescue_from ActiveRecord::RecordInvalid, with: :render_json_error
 
   def decode_firebase_token(request)
+    FirebaseIdToken::Certificates.request
     jwt_token = request.headers['Authorization']
     jwt_token.slice!("Bearer ")
     firebase_user_json = FirebaseIdToken::Signature.verify(jwt_token)
     raise AuthenticationError, "Invalid token" if firebase_user_json.nil?
+
     return firebase_user_json
   end
 
