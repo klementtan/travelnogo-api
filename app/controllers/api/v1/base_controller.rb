@@ -21,6 +21,11 @@ class Api::V1::BaseController < ActionController::Base
   def authenticate
     firebase_user_json = decode_firebase_token(request)
     @user = User.find_by_firebase_uuid(firebase_user_json["sub"])
+    if @user.nil?
+      @user = User.find_by_email(firebase_user_json['email'])
+      @user.firebase_uuid = firebase_user_json['sub']
+      @user.name = firebase_user_json['name']
+    end
     raise AuthenticationError, "#{firebase_user_json["email"]} does not belong to a valid user or has not been created" if @user.nil?
   end
 

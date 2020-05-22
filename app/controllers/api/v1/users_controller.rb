@@ -9,16 +9,20 @@ class Api::V1::UsersController < Api::V1::BaseController
     }
   end
 
-  def update_user_uuid
-    user_data = params['user']
-    user_info_data = user_data['user_info']
-    @user = User.find_by_email(user_info_data['email'])
-    raise AuthenticationError, "User #{User['email']} is not a valid admin email" if @user.nil?
+  # def update_user_uuid
+  #   user_data = params['user']
+  #   user_info_data = user_data['user_info']
+  #   @user = User.find_by_email(user_info_data['email'])
+  #   raise AuthenticationError, "User #{User['email']} is not a valid admin email" if @user.nil?
+  #
+  #   @user.firebase_uuid = user_data['firebase_uuid']
+  #   @user.name = user_info_data['name']
+  #   @user.save!
+  #
+  #   render json: @user, serializer: UserSerializer
+  # end
 
-    @user.firebase_uuid = user_data['firebase_uuid']
-    @user.name = user_info_data['name']
-    @user.save!
-
+  def get_user
     render json: @user, serializer: UserSerializer
   end
 
@@ -35,6 +39,8 @@ class Api::V1::UsersController < Api::V1::BaseController
       next unless User.find_by_email(email).nil?
 
       user = User.create!(email: email)
+      user.add_role AuthorizationRoles::ADMIN if user.roles.blank?
+
       new_users.append(user)
     end
     render json: new_users

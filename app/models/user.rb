@@ -1,9 +1,8 @@
 class User < ApplicationRecord
-  after_create :assign_default_role
-  has_many :bans, :dependent => :nullify
+  # after_create :assign_default_role
+  # has_many :bans, :dependent => :nullify
   validates_presence_of :email
   validates :email, format: { with: URI::MailTo::EMAIL_REGEXP }
-  validates :firebase_uuid, uniqueness: true
 
   rolify
 
