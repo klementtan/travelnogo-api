@@ -5,7 +5,8 @@ RUN apt-get update -qq && \
  wget gnupg \
  git-all \
  curl \
- ssh \ nodejs postgresql-client
+ ssh \
+ nodejs postgresql-client
 RUN mkdir /myapp
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile
