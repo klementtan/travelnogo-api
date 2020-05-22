@@ -27,8 +27,3 @@ RUN echo "in prod"
 RUN EDITOR="mate --wait" bundle exec rails credentials:edit
 
 ENV RAILS_ENV production
-
-RUN EDITOR="mate --wait" bundle exec rails credentials:edit
-
-# Start the main process.
-CMD ["rails", "server", "-b", "0.0.0.0"]

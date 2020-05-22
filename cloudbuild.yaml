@@ -1,0 +1,13 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    entrypoint: 'sh'
+    args:
+      - '-c'
+      - |
+        docker pull us.gcr.io/$PROJECT_ID/travelnogo-api:latest || true
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '--cache-from', 'us.gcr.io/$PROJECT_ID/travelnogo-api:latest', '-t', 'us.gcr.io/$PROJECT_ID/travelnogo-api:latest', '-t', 'us.gcr.io/$PROJECT_ID/travelnogo-api:$COMMIT_SHA', '.' ]
+images:
+  - 'us.gcr.io/$PROJECT_ID/travelnogo-api:latest'
+  - 'us.gcr.io/$PROJECT_ID/travelnogo-api:$COMMIT_SHA'
+timeout: 3600s

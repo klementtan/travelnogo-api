@@ -47,18 +47,18 @@ test:
 #   production:
 #     url: <%= ENV['DATABASE_URL'] %>
 #
-#production:
-#  adapter: postgresql
-#  encoding: unicode
-#  database: travelnogo_api_production
-#  username: travelnogo_api
-#  password: <%#= ENV['TRAVELNOGO_API_DATABASE_PASSWORD'] %>
-
-
 production:
   adapter: postgresql
   encoding: unicode
-  host: 34.87.61.137
   database: travelnogo_api_production
-  username: <%= ENV['PROD_MYSQL_USERNAME'] %>
-  password: <%= ENV['PROD_MYSQL_PASSWORD'] %>
+  username: travelnogo_api
+  password: <%= ENV['TRAVELNOGO_API_DATABASE_PASSWORD'] %>
+
+
+#production:
+#  adapter: postgresql
+#  encoding: unicode
+#  host: 34.87.61.137
+#  database: travelnogo_api_production
+#  username: <%#= ENV['PROD_MYSQL_USERNAME'] %>
+#  password: <%#= ENV['PROD_MYSQL_PASSWORD'] %>
