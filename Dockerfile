@@ -1,6 +1,11 @@
 FROM ruby:2.6.4
 
-RUN apt-get update -qq && apt-get install -y nodejs postgresql-client
+RUN apt-get update -qq && \
+ apt-get install -y  vim \
+ wget gnupg \
+ git-all \
+ curl \
+ ssh \ nodejs postgresql-client
 RUN mkdir /myapp
 WORKDIR /myapp
 COPY Gemfile /myapp/Gemfile

@@ -10,6 +10,7 @@ class Api::V1::BaseController < ActionController::Base
   def decode_firebase_token(request)
     FirebaseIdToken::Certificates.request
     jwt_token = request.headers['Authorization']
+    raise AuthenticationError, "Bearer Token empty" if jwt_token.nil?
     jwt_token.slice!("Bearer ")
     firebase_user_json = FirebaseIdToken::Signature.verify(jwt_token)
     raise AuthenticationError, "Invalid token" if firebase_user_json.nil?

@@ -1,6 +1,8 @@
 Rails.application.routes.draw do
   namespace :api do
     namespace :v1 do
+      get '/helloworld' => 'users#helloworld'
+
       post '/ban' => 'bans#create'
       post '/many_ban' => 'bans#create_many'
 

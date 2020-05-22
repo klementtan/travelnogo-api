@@ -13,8 +13,7 @@ spec:
   selector:
     matchLabels:
       io.kompose.service: web
-  strategy:
-    type: Recreate
+  strategy: {}
   template:
     metadata:
       annotations:
@@ -34,20 +33,15 @@ spec:
           value: "8"
         - name: REDIS_HOST
           value: redis
-        image: "gcr.io/travelnogo/travelnogo-api_web"
-        imagePullPolicy: ""
+        - name: REDIS_URL
+          value: redis://redis:6379/0
+        image: klementtandn/travelnogo-api_web
+        imagePullPolicy: "Always"
         name: web
         ports:
         - containerPort: 3000
         resources: {}
-        volumeMounts:
-        - mountPath: /myapp
-          name: web-claim0
       restartPolicy: Always
       serviceAccountName: ""
-      volumes:
-      - name: web-claim0
-        persistentVolumeClaim:
-          claimName: web-claim0
-
+      volumes: null
 status: {}
