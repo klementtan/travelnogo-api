@@ -2,7 +2,10 @@ require 'rails_helper'
 
 RSpec.describe 'Scraper Controller', type: :request do
   before(:all) { Rails.application.load_seed }
-  before(:each) { ScraperRequest.destroy_all }
+  before(:each) {
+
+    ScraperRequest.destroy_all
+  }
   describe 'Create IATA Scrapper Ban Request' do
     it 'Should Create new scraper ban request for country all' do
       post '/api/v1/scraper/iata',
@@ -18,7 +21,6 @@ RSpec.describe 'Scraper Controller', type: :request do
                }
              }
            }
-      
       response_json = JSON.parse(response.body)
       expect(response_json['date']).to eq('12.05.2020')
       expect(response_json['source']).to eq('IATA')
@@ -109,18 +111,18 @@ RSpec.describe 'Scraper Controller', type: :request do
       n = 10
       while n > 0 do
         post '/api/v1/scraper/iata',
-          params: {
-            "date": '12.05.2020',
-            "scrape_data": {
-              "AFGHANISTAN": {
-                "ISO2": 'AF',
-                "published_date": '24.04.2020',
-                "possible_bannees": [],
-                "info":
-                  "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
-              }
-            }
-          }
+             params: {
+               "date": '12.05.2020',
+               "scrape_data": {
+                 "AFGHANISTAN": {
+                   "ISO2": 'AF',
+                   "published_date": '24.04.2020',
+                   "possible_bannees": [],
+                   "info":
+                     "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+                 }
+               }
+             }
         n -= 1
         end
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::OUTDATED).length).to eq(9)
@@ -129,18 +131,18 @@ RSpec.describe 'Scraper Controller', type: :request do
 
     it 'If the latest request is done and the new request is exactly the same, the new request will have done status ' do
       post '/api/v1/scraper/iata',
-        params: {
-          "date": '12.05.2020',
-          "scrape_data": {
-            "AFGHANISTAN": {
-              "ISO2": 'AF',
-              "published_date": '24.04.2020',
-              "possible_bannees": [],
-              "info":
-                "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
-            }
-          }
-        }
+           params: {
+             "date": '12.05.2020',
+             "scrape_data": {
+               "AFGHANISTAN": {
+                 "ISO2": 'AF',
+                 "published_date": '24.04.2020',
+                 "possible_bannees": [],
+                 "info":
+                   "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+               }
+             }
+           }
       response_json = JSON.parse(response.body)
       scraper_ban_requests = response_json['scraper_ban_requests']
       scraper_ban_request = scraper_ban_requests[0]
@@ -150,36 +152,36 @@ RSpec.describe 'Scraper Controller', type: :request do
       scraper_ban_request.save
 
       post '/api/v1/scraper/iata',
-        params: {
-          "date": '12.05.2020',
-          "scrape_data": {
-            "AFGHANISTAN": {
-              "ISO2": 'AF',
-              "published_date": '24.04.2020',
-              "possible_bannees": [],
-              "info":
-                "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
-            }
-          }
-        }
+           params: {
+             "date": '12.05.2020',
+             "scrape_data": {
+               "AFGHANISTAN": {
+                 "ISO2": 'AF',
+                 "published_date": '24.04.2020',
+                 "possible_bannees": [],
+                 "info":
+                   "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+               }
+             }
+           }
 
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::DONE).length).to eq(2)
     end
 
     it 'If the latest request is done and the new request is exactly the same, the new request will have done status ' do
       post '/api/v1/scraper/iata',
-        params: {
-          "date": '12.05.2020',
-          "scrape_data": {
-            "AFGHANISTAN": {
-              "ISO2": 'AF',
-              "published_date": '24.04.2020',
-              "possible_bannees": [],
-              "info":
-                "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
-            }
-          }
-        }
+           params: {
+             "date": '12.05.2020',
+             "scrape_data": {
+               "AFGHANISTAN": {
+                 "ISO2": 'AF',
+                 "published_date": '24.04.2020',
+                 "possible_bannees": [],
+                 "info":
+                   "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+               }
+             }
+           }
       response_json = JSON.parse(response.body)
       scraper_ban_requests = response_json['scraper_ban_requests']
       scraper_ban_request = scraper_ban_requests[0]
@@ -189,18 +191,18 @@ RSpec.describe 'Scraper Controller', type: :request do
       scraper_ban_request.save
 
       post '/api/v1/scraper/iata',
-        params: {
-          "date": '12.05.2020',
-          "scrape_data": {
-            "AFGHANISTAN": {
-              "ISO2": 'AF',
-              "published_date": '24.04.2020',
-              "possible_bannees": [],
-              "info":
-                "Lorem Ipsum"
-            }
-          }
-        }
+           params: {
+             "date": '12.05.2020',
+             "scrape_data": {
+               "AFGHANISTAN": {
+                 "ISO2": 'AF',
+                 "published_date": '24.04.2020',
+                 "possible_bannees": [],
+                 "info":
+                   "Lorem Ipsum"
+               }
+             }
+           }
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::DONE).length).to eq(1)
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).length).to eq(1)
     end
@@ -208,20 +210,20 @@ RSpec.describe 'Scraper Controller', type: :request do
     describe 'Get Pending Reviews' do
       it 'Should return all the pending reviews' do
         post '/api/v1/scraper/iata',
-          params: {
-            "date": '12.05.2020',
-            "scrape_data": {
-              "AFGHANISTAN": {
-                "ISO2": 'AF',
-                "published_date": '24.04.2020',
-                "possible_bannees": ["SG", "US", "CN"],
-                "info":
-                  "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
-              }
-            }
-          }
+             params: {
+               "date": '12.05.2020',
+               "scrape_data": {
+                 "AFGHANISTAN": {
+                   "ISO2": 'AF',
+                   "published_date": '24.04.2020',
+                   "possible_bannees": ["SG", "US", "CN"],
+                   "info":
+                     "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+                 }
+               }
+             }
         get '/api/v1/scraper'
-        pending_review_arr = JSON.parse(response.body)
+        pending_review_arr = JSON.parse(response.body)['AF']
         expect(pending_review_arr.length).to be(3)
         
         pending_review_sg = pending_review_arr[0]
@@ -239,34 +241,34 @@ RSpec.describe 'Scraper Controller', type: :request do
 
       it 'Should return all the pending reviews and filter out the other statuses' do
         post '/api/v1/scraper/iata',
-          params: {
-            "date": '12.05.2020',
-            "scrape_data": {
-              "AFGHANISTAN": {
-                "ISO2": 'AF',
-                "published_date": '24.04.2020',
-                "possible_bannees": ["SG", "US", "CN"],
-                "info":
-                  "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
-              }
-            }
-          }
+             params: {
+               "date": '12.05.2020',
+               "scrape_data": {
+                 "AFGHANISTAN": {
+                   "ISO2": 'AF',
+                   "published_date": '24.04.2020',
+                   "possible_bannees": ["SG", "US", "CN"],
+                   "info":
+                     "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+                 }
+               }
+             }
           ScraperBanRequest.find_by(banner: Country.find_by_code("AF"), bannee: Country.find_by_code("SG")).status = ScraperRequestStatus::DONE
           post '/api/v1/scraper/iata',
-          params: {
-            "date": '12.05.2020',
-            "scrape_data": {
-              "AFGHANISTAN": {
-                "ISO2": 'AF',
-                "published_date": '24.04.2020',
-                "possible_bannees": ["SG", "US", "CN"],
-                "info":
-                  "Lorem Ipsum"
-              }
-            }
-          }
+               params: {
+                 "date": '12.05.2020',
+                 "scrape_data": {
+                   "AFGHANISTAN": {
+                     "ISO2": 'AF',
+                     "published_date": '24.04.2020',
+                     "possible_bannees": ["SG", "US", "CN"],
+                     "info":
+                       "Lorem Ipsum"
+                   }
+                 }
+               }
         get '/api/v1/scraper'
-        pending_review_arr = JSON.parse(response.body)
+        pending_review_arr = JSON.parse(response.body)["AF"]
         expect(pending_review_arr.length).to be(3)
         expect(ScraperBanRequest.all.length).to be(6)
         

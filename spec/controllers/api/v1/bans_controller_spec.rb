@@ -1,10 +1,18 @@
 require 'rails_helper'
 
 RSpec.describe 'Bans Controller', type: :request do
-  before(:all) { Rails.application.load_seed }
-  before(:each) { ScraperRequest.destroy_all }
+  before(:all) {
+    Rails.application.load_seed
+
+  }
+  before(:each) {
+    allow_any_instance_of(Api::V1::BaseController).to receive(:authenticate).and_return(true)
+    ScraperRequest.destroy_all
+
+  }
   describe 'Create Ban' do
     it 'Should Create new Ban' do
+
       post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
            params: {
              "banner": 'AL',

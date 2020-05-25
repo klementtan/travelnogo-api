@@ -132,6 +132,10 @@ raw_country_code = [
     "callingCode":"590"
   },
   {
+      "name":"Bonaire, Sint Eustatius and Saba",
+      "code":"BQ",
+  },
+  {
     "name":"Belarus",
     "code":"BY",
     "callingCode":"375"
@@ -605,6 +609,10 @@ raw_country_code = [
     "name":"Saint Kitts and Nevis",
     "code":"KN",
     "callingCode":"1869"
+  },
+  {
+      "name":"Saint Helena, Ascension and Tristan da Cunha",
+      "code":"SH"
   },
   {
     "name":"South Korea",

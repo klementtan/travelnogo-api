@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
+    <data-source source="LOCAL" name="Rails travelnogo-api: production" uuid="8de06540-80bb-4d0e-95e7-91cb367ed432">
+      <driver-ref>greenplum</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/config/database.yml</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://127.0.0.1:5432/travelnogo_api_production</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="Rails travelnogo-api: test" uuid="cdff5494-f704-4ffe-828e-b5978653b12f">
+      <driver-ref>greenplum</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/config/database.yml</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://127.0.0.1:5432/travelnogo_api_test</jdbc-url>
+    </data-source>
+    <data-source source="LOCAL" name="Rails travelnogo-api: development" uuid="7bcd6e7c-aa7f-4e02-9840-04808a3d235a">
+      <driver-ref>greenplum</driver-ref>
+      <synchronize>true</synchronize>
+      <imported>true</imported>
+      <remarks>$PROJECT_DIR$/config/database.yml</remarks>
+      <jdbc-driver>org.postgresql.Driver</jdbc-driver>
+      <jdbc-url>jdbc:postgresql://127.0.0.1:5432/travelnogo_api_development</jdbc-url>
+    </data-source>
+  </component>
+</project>

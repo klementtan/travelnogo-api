@@ -5,7 +5,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
     scrape_request =
       ScraperRequest.create(source: ScraperSources::IATA, date: date)
     scrape_data.each do |country_name, country_info|
-      begin 
+      begin
         banner = Country.find_by_code(country_info['ISO2'])
         ban_description = country_info['info']
         published_date = Date.parse(country_info['published_date'])
@@ -50,8 +50,50 @@ class Api::V1::ScrapersController < Api::V1::BaseController
   end
 
   def get_pending_review
-    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW)
-    render json: pending_reviews, each_serializer: ScraperBanRequestSerializer
+    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:banner_id)
+    ban_request_ptr = 0
+    curr_banner = pending_reviews[ban_request_ptr].banner
+    curr_banner_pending_review = []
+    response = {}
+    while ban_request_ptr < pending_reviews.length
+      banner = pending_reviews[ban_request_ptr].banner
+      if banner == curr_banner
+
+        curr_banner_pending_review.append(ScraperBanRequestSerializer.new(pending_reviews[ban_request_ptr]).serializable_hash)
+      else
+        response[curr_banner.code] = curr_banner_pending_review
+        curr_banner_pending_review = []
+        curr_banner = pending_reviews[ban_request_ptr+1].banner if ban_request_ptr + 1 < pending_reviews.length
+      end
+      ban_request_ptr+=1
+    end
+    response[curr_banner.code] = curr_banner_pending_review if response.empty? && !curr_banner_pending_review.empty?
+
+    render json: response
+  end
+
+  def get_pending_review_overview
+    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:banner_id)
+    ban_request_ptr = 0
+    curr_banner = pending_reviews[ban_request_ptr].banner
+    curr_count = 0;
+    curr_banner_pending_review = []
+    response = {}
+    while ban_request_ptr < pending_reviews.length
+      banner = pending_reviews[ban_request_ptr].banner
+      if banner == curr_banner
+        curr_count += 1
+      else
+        response[curr_banner.code] = curr_count
+        curr_count = 0;
+        curr_banner = pending_reviews[ban_request_ptr+1].banner if ban_request_ptr + 1 < pending_reviews.length
+      end
+      ban_request_ptr+=1
+    end
+    render json: {
+        overview: response,
+        total_count: pending_reviews.length
+    }
   end
 
   private
