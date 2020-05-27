@@ -57,7 +57,7 @@ test:
 
 production:
   <<: *default
-  database: ruby-getting-travelnogo_production
+  database: travelnogo_production
   username: travelnogo
   password: <%= ENV['TRAVELNOGO_DATABASE_PASSWORD'] %>
   host: <%= ENV['DB_HOST'] %>
