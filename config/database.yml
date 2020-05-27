@@ -56,11 +56,8 @@ test:
 
 
 production:
-  adapter: postgresql
-  encoding: unicode
-  host: <%= ENV['DB_HOST'] %>
-  database: travelnogo_production
+  <<: *default
+  database: ruby-getting-travelnogo_production
   username: travelnogo
   password: <%= ENV['TRAVELNOGO_DATABASE_PASSWORD'] %>
-
-
+  host: <%= ENV['DB_HOST'] %>

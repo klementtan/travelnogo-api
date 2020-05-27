@@ -15,8 +15,10 @@ class Api::V1::UsersController < Api::V1::BaseController
     end
 
     render json: {
-        database_connection: database_connection,
-        message: ENV['HELLO_WORLD']
+      db_host: ENV['DB_HOST'],
+      db_pw: ENV['TRAVELNOGO_DATABASE_PASSWORD'],
+      database_connection: database_connection,
+      message: ENV['HELLO_WORLD']
     }
   end
 
