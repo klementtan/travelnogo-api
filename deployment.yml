@@ -11,7 +11,7 @@ spec:
     spec:
       containers:
         - name: travelnogo
-          image: gcr.io/$PROJECT/travelnogo:latest
+          image: gcr.io/travelnogo/travelnogo:latest
           ports:
             - containerPort: 8080
           livenessProbe:
