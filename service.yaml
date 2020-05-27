@@ -1,0 +1,13 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: travelnogo-service
+spec:
+  selector:
+    app: travelnogo-app
+  type: LoadBalancer
+  ports:
+  - name: http
+    protocol: TCP
+    port: 80
+    targetPort: 8080
