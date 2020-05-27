@@ -25,8 +25,8 @@
 #
 ## Pre-compile assets
 #RUN EDITOR="mate --wait" bundle exec rails credentials:edit
-#
-#ENV RAILS_ENV production
+
+ENV RAILS_ENV production
 FROM ruby:2.6.4
 
 RUN apt-get update \
@@ -37,11 +37,10 @@ RUN apt-get update \
 # Copy application files and install the bundle
 WORKDIR /usr/src/app
 COPY Gemfile* ./
+RUN gem install bundler:2.0.2
 RUN bundle install
 COPY . .
 
-# Run asset pipeline.
-RUN bundle exec rake assets:precompile
 
 EXPOSE 8080
 CMD ["bundle", "exec", "rackup", "--port=8080", "--env=production"]
