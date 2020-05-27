@@ -28,7 +28,7 @@ spec:
             timeoutSeconds: 1
           env:
             - name: DB_HOST
-              value: $DB_HOST
+              value: 10.109.0.2
             - name: DB_USER
               valueFrom:
                 secretKeyRef:
