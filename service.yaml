@@ -4,7 +4,7 @@ metadata:
   name: travelnogo-service
 spec:
   selector:
-    app: travelnogo-app
+    app: travelnogo
   type: LoadBalancer
   ports:
   - name: http
