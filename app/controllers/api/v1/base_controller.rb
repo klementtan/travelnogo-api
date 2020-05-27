@@ -5,6 +5,7 @@ class Api::V1::BaseController < ActionController::Base
   rescue_from Exception, with: :render_500_error
   rescue_from AuthenticationError, with: :render_403_error
   rescue_from AuthorizationError, with: :render_403_error
+  rescue_from InvalidParamsError, with: :render_400_error
   rescue_from ActiveRecord::RecordNotFound, with: :render_404_error
   rescue_from ActiveRecord::RecordInvalid, with: :render_json_error
 
@@ -24,10 +25,11 @@ class Api::V1::BaseController < ActionController::Base
     @user = User.find_by_firebase_uuid(firebase_user_json["sub"])
     if @user.nil?
       @user = User.find_by_email(firebase_user_json['email'])
+      raise AuthenticationError, "#{firebase_user_json["email"]} does not belong to a valid user or has not been created" if @user.nil?
       @user.firebase_uuid = firebase_user_json['sub']
       @user.name = firebase_user_json['name']
+      @user.save!
     end
-    raise AuthenticationError, "#{firebase_user_json["email"]} does not belong to a valid user or has not been created" if @user.nil?
   end
 
   def render_json_error(error)

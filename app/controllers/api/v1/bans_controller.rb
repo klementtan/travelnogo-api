@@ -15,10 +15,11 @@ class Api::V1::BansController < Api::V1::BaseController
 
   def create_many
     authenticate
-
+    byebug
     banner = Country.find_by_code(params[:banner])
 
     bans = []
+    raise InvalidParamsError, "Enter country receiving travel restriction" if params[:bannee].empty?
 
     params[:bannee].each do |bannee_code|
       #update actual ban

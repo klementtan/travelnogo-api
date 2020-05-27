@@ -132,7 +132,7 @@ raw_country_code = [
     "callingCode":"590"
   },
   {
-      "name":"Bonaire, Sint Eustatius and Saba",
+    "name":"Bonaire, Sint Eustatius and Saba",
       "code":"BQ",
   },
   {
@@ -611,7 +611,7 @@ raw_country_code = [
     "callingCode":"1869"
   },
   {
-      "name":"Saint Helena, Ascension and Tristan da Cunha",
+    "name":"Saint Helena, Ascension and Tristan da Cunha",
       "code":"SH"
   },
   {
@@ -1274,3 +1274,22 @@ unless Country.find_by_code('ALL')
   all_country.save!
 end
 
+
+admin_users = [
+  {
+    "email": "klementtan@gmail.com",
+    "role": AuthorizationRoles::SUPER_ADMIN
+  },
+  {
+    "email": "klement.tandn@gmail.com",
+    "role": AuthorizationRoles::ADMIN
+  }
+]
+
+
+admin_users.each do |admin_user|
+
+  user = User.create!(email: admin_user[:email])
+  user.add_role admin_user[:role]
+  user.save!
+end

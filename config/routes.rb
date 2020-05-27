@@ -24,6 +24,7 @@ Rails.application.routes.draw do
       get '/users/' => 'users#get_all_users'
       post '/user/' => 'users#create_admin_user'
       get '/user/' => 'users#get_user'
+      get '/user/check_valid_email' => 'users#check_valid_email'
       post '/user/firebase' => 'users#update_user_uuid'
     end
   end
