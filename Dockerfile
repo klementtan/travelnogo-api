@@ -26,7 +26,7 @@
 ## Pre-compile assets
 #RUN EDITOR="mate --wait" bundle exec rails credentials:edit
 
-ENV RAILS_ENV production
+#ENV RAILS_ENV production
 FROM ruby:2.6.4
 
 RUN apt-get update \
