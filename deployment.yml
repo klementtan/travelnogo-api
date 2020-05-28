@@ -44,3 +44,7 @@ spec:
                 secretKeyRef:
                   name: travelnogo-credentials
                   key: secret_key_base
+            - name: REDIS_HOST
+              value: redis-master
+            - name: REDIS_PORT
+              value: "6379
