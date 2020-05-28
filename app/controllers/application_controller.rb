@@ -34,14 +34,15 @@ class ApplicationController < ActionController::API;
   end
 
   def migrate_server
+    byebug
     data = JSON.parse(params['data'])
     i = 1
     data.each do |ban|
-
       banner = Country.find_by_code(ban['banner']['code'])
-      bannee = Country.find_by_code(ban['banner']['code'])
+      bannee = Country.find_by_code(ban['bannee']['code'])
       puts i.to_s + '/' + data.length.to_s
       ban_new = Ban.find_by(banner: banner, bannee: bannee)
+      byebug
       next unless ban_new.nil?
 
       ban_url = ban['ban_url']
@@ -49,6 +50,7 @@ class ApplicationController < ActionController::API;
       ban_type = ban['ban_type']
 
       new_ban = Ban.create!(banner: banner, bannee: bannee, ban_url: ban_url, ban_description: ban_description, ban_type: ban_type)
+      byebug
       new_ban.save!
 
       puts 'Adding new ban for ' + banner.country_name + ' imposing on ' + bannee.country_name
