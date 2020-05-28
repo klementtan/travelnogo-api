@@ -17,10 +17,11 @@ class ApplicationController < ActionController::API;
     #Check redis connection
     redis_connection = true
     begin
-      Rails.cache.write(:test, true)
-      Rails.cache.read(:test)
-    rescue
-      puts 'Redis Not Connect'
+      puts "Connecting to Redis..."
+      r = Redis.new
+      r.ping
+    rescue Errno::ECONNREFUSED => e
+      puts "Error: Redis server unavailable. Shutting down..."
       redis_connection =  false
     end
 
