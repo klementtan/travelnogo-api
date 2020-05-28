@@ -1268,6 +1268,19 @@ raw_country_code.each do |country_json|
   end
 end
 
+ISO3166::Country.all.each do |country_object|
+  code = country_object.alpha2
+  country = Country.find_by_code(code)
+  next unless country.nil?
+  name = country_object.name
+  country = Country.create!(code: code, country_name: name, all_countries: false)
+  country.save
+
+  puts ("Add new country"+ name + "-"+ code)
+
+
+end
+
 unless Country.find_by_code('ALL')
   all_country =
     Country.create(country_name: 'ALL COUNTRY', code: 'ALL', all_countries: true)
@@ -1288,7 +1301,7 @@ admin_users = [
 
 
 admin_users.each do |admin_user|
-
+  next unless User.find_by_email(admin_user[:email]).nil?
   user = User.create!(email: admin_user[:email])
   user.add_role admin_user[:role]
   user.save!

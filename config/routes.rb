@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
   get '/' => 'application#health_check'
+  post '/migrate_server' => 'application#migrate_server'
   namespace :api do
     namespace :v1 do
       get '/helloworld' => 'users#helloworld'
