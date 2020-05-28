@@ -31,7 +31,7 @@ FROM ruby:2.6.4
 
 RUN apt-get update \
     && apt-get install -y --no-install-recommends \
-        nodejs postgresql-client \
+        nodejs postgresql-client redis-tools vim\
     && rm -rf /var/lib/apt/lists/*
 
 # Copy application files and install the bundle
