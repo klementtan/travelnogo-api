@@ -18,8 +18,7 @@ class ApplicationController < ActionController::API;
     redis_connection = true
     begin
       puts "Connecting to Redis..."
-      r = Redis.new
-      r.ping
+      REDIS.ping
     rescue
       puts "Error: Redis server unavailable. Shutting down..."
       redis_connection =  false
