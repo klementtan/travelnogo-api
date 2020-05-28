@@ -20,7 +20,7 @@ class ApplicationController < ActionController::API;
       puts "Connecting to Redis..."
       r = Redis.new
       r.ping
-    rescue Errno::ECONNREFUSED => e
+    rescue
       puts "Error: Redis server unavailable. Shutting down..."
       redis_connection =  false
     end
