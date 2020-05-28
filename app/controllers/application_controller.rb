@@ -52,11 +52,11 @@ class ApplicationController < ActionController::API;
       new_ban.save!
 
       puts 'Adding new ban for ' + banner.country_name + ' imposing on ' + bannee.country_name
-
-      render json: {
-          message: "ok"
-      }
-
+      i = i + 1
     end
+    render json: {
+        message: "ok"
+    }
+
   end
 end

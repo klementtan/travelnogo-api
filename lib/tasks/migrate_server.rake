@@ -17,6 +17,7 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
   puts request.body
   response = http.request(request)
 
-  puts 'Stratus: ' + response.status
+  puts 'Status: ' + response.code
+  puts 'Message: ' + response.message
 
 end
