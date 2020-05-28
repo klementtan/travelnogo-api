@@ -4,5 +4,5 @@ docker push gcr.io/travelnogo/travelnogo
 kubectl delete -f deployment.yml
 kubectl delete -f redis-master.yml
 kubectl apply -f deployment.yml
-kubectl apply -f service.yml
+kubectl apply -f redis-master.yml
 
