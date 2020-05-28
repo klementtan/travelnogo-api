@@ -1,5 +1,6 @@
 class ApplicationController < ActionController::API;
   def health_check
+    #Check db connection
     database_connection = false
     require './config/environment.rb' # Assuming the script is located in the root of the rails app
     begin
@@ -12,7 +13,19 @@ class ApplicationController < ActionController::API;
     rescue
       puts 'NOT CONNECTED!'
     end
+
+    #Check redis connection
+    redis_connection = true
+    begin
+      Rails.cache.write(:test, true)
+      Rails.cache.read(:test)
+    rescue
+      puts 'Redis Not Connect'
+      redis_connection =  false
+    end
+
     render json: {
+        redis_connection: redis_connection,
         sever_running: true,
         database_connection: database_connection
     }

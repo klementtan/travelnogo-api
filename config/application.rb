@@ -14,6 +14,7 @@ require 'action_view/railtie'
 require 'action_cable/engine'
 require 'active_model_serializers'
 # require "sprockets/railtie"
+require 'redis'
 require 'rails/test_unit/railtie'
 require 'jwt'
 require 'httparty'
