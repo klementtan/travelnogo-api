@@ -32,7 +32,7 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
     puts 'Status: ' + response.code
     puts 'Message: ' + response.message
 
-    if response.code != 200
+    if response.code != "200"
       uri = URI.parse(args[:endpoint])
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri, header)
@@ -45,7 +45,7 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
       puts 'Trying again 1'
       puts 'Status: ' + response.code
       puts 'Message: ' + response.message
-      if response.code != 200
+      if response.code != "200"
         uri = URI.parse(args[:endpoint])
         http = Net::HTTP.new(uri.host, uri.port)
         request = Net::HTTP::Post.new(uri.request_uri, header)
@@ -58,7 +58,8 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
         puts 'Trying again 2'
         puts 'Status: ' + response.code
         puts 'Message: ' + response.message
-        if response.code != 200
+
+        if response.code != "200"
           uri = URI.parse(args[:endpoint])
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Post.new(uri.request_uri, header)
