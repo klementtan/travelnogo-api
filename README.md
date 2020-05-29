@@ -1,24 +1,13 @@
-# README
+# Deploying with kubernetes
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+## Updating change
+`./deploy.sh`
 
-Things you may want to cover:
+## Running commands
 
-* Ruby version
+`kubectl exec -it {pod name} -- /bin/bash`
 
-* System dependencies
 
-* Configuration
 
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+## Tail logs
+kubectl logs --follow -l app=travelnogoq
