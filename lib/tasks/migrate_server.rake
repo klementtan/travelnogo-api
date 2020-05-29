@@ -33,7 +33,7 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
     puts 'Message: ' + response.message
 
     if response.code != "200"
-      byebug
+
       uri = URI.parse(args[:endpoint])
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri, header)
