@@ -35,7 +35,6 @@ class Api::V1::BaseController < ActionController::Base
   end
 
   def authenticate_internal
-
     raise AuthenticationError if  request.headers['X-TRAVELNOGO-KEY'] != ENV['X_TRAVELNOGO_KEY']
   end
 

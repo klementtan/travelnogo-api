@@ -39,6 +39,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
           end
         end
       rescue Exception => e
+
         #Log
       end
 
