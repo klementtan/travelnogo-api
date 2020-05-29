@@ -15,7 +15,7 @@ class Api::V1::BansController < Api::V1::BaseController
 
   def create_many
     authenticate
-    byebug
+
     banner = Country.find_by_code(params[:banner])
 
     bans = []
