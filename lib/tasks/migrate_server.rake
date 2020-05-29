@@ -36,6 +36,10 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
       uri = URI.parse(args[:endpoint])
       http = Net::HTTP.new(uri.host, uri.port)
       request = Net::HTTP::Post.new(uri.request_uri, header)
+      body = {
+          data: curr_bans.to_json
+      }
+      request.body = body.to_json
       response = http.request(request)
       sleep 3
       puts 'Trying again 1'
@@ -45,6 +49,10 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
         uri = URI.parse(args[:endpoint])
         http = Net::HTTP.new(uri.host, uri.port)
         request = Net::HTTP::Post.new(uri.request_uri, header)
+        body = {
+            data: curr_bans.to_json
+        }
+        request.body = body.to_json
         response = http.request(request)
         sleep 3
         puts 'Trying again 2'
@@ -54,6 +62,10 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
           uri = URI.parse(args[:endpoint])
           http = Net::HTTP.new(uri.host, uri.port)
           request = Net::HTTP::Post.new(uri.request_uri, header)
+          body = {
+              data: curr_bans.to_json
+          }
+          request.body = body.to_json
           sleep 3
           response = http.request(request)
           puts 'Trying again 3'
