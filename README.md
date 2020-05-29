@@ -10,4 +10,4 @@
 
 
 ## Tail logs
-kubectl logs --follow -l app=travelnogoq
+`kubectl logs --follow -l app=travelnogoq`
