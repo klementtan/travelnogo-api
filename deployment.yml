@@ -16,13 +16,13 @@ spec:
             - containerPort: 8080
           livenessProbe:
             httpGet:
-              path: /
+              path: /api/v1/utils/check_liveness
               port: 8080
             initialDelaySeconds: 30
             timeoutSeconds: 1
           readinessProbe:
             httpGet:
-              path: /
+              path: /api/v1/utils/check_liveness
               port: 8080
             initialDelaySeconds: 30
             timeoutSeconds: 1

@@ -1,7 +1,7 @@
 # Parent class for all API controllers
 class Api::V1::BaseController < ActionController::Base
   skip_before_action :verify_authenticity_token
-  helper_method :authenticate, :decode_firebase_token
+  helper_method :authenticate, :decode_firebase_token, :authenticate_internal
   rescue_from Exception, with: :render_500_error
   rescue_from AuthenticationError, with: :render_403_error
   rescue_from AuthorizationError, with: :render_403_error
@@ -32,6 +32,10 @@ class Api::V1::BaseController < ActionController::Base
       @user.name = firebase_user_json['name']
       @user.save!
     end
+  end
+
+  def authenticate_internal
+    raise AuthenticationError if  request.headers['X-TRAVELNOGO-KEY'] !=request.headers['X-TRAVELNOGO-KEY']
   end
 
   def render_json_error(error)

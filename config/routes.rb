@@ -1,7 +1,4 @@
 Rails.application.routes.draw do
-  get '/' => 'application#health_check'
-  get '/all_api_logs' => 'application#all_api_logs'
-  post '/migrate_server' => 'application#migrate_server'
   namespace :api do
     namespace :v1 do
       get '/helloworld' => 'users#helloworld'
@@ -29,6 +26,11 @@ Rails.application.routes.draw do
       get '/user/' => 'users#get_user'
       get '/user/check_valid_email' => 'users#check_valid_email'
       post '/user/firebase' => 'users#update_user_uuid'
+
+      get '/utils/check_liveness' => 'utils#check_liveness'
+      get '/utils/health_check' => 'utils#health_check'
+      get '/utils/all_api_logs' => 'utils#all_api_logs'
+      post '/utils/migrate_server' => 'utils#migrate_server'
     end
   end
 end

@@ -1,5 +1,6 @@
-class ApplicationController < ActionController::API;
-  rescue_from Exception, with: :render_500_error
+class Api::V1::UtilsController < Api::V1::BaseController
+  before_action :authenticate_internal
+  skip_before_action :authenticate_internal, only: [:check_liveness]
 
   def health_check
     #Check db connection
@@ -28,11 +29,18 @@ class ApplicationController < ActionController::API;
     end
 
     render json: {
-      firebase_cert: FirebaseIdToken::Certificates.present?,
-      redis_connection: redis_connection,
-      sever_running: true,
-      database_connection: database_connection
+        firebase_cert: FirebaseIdToken::Certificates.present?,
+        redis_connection: redis_connection,
+        sever_running: true,
+        database_connection: database_connection
     }
+  end
+
+  def check_liveness
+    render json: {
+        message: 'ok'
+    }
+
   end
 
   def all_api_logs
@@ -49,7 +57,7 @@ class ApplicationController < ActionController::API;
       ApiQueryLog.create!(response: "#{ban['bannee']['code']} cannot be found") if bannee.nil?
 
       ApiQueryLog.create!(response: "#{ban['banner']['code']} cannot be found") if banner.nil?
-      
+
       next if bannee.nil? || banner.nil?
 
       puts i.to_s + '/' + data.length.to_s
@@ -71,48 +79,5 @@ class ApplicationController < ActionController::API;
     }
   end
 
-  def render_500_error(error)
-    log_api_call(500, error)
-    render json: {error: error.message}, status: 500 # Internal Server Error
-  end
 
-  protected
-  # API Query Logs are cleared every three months. Look at task_scheduler.rb and XfersDailyCleanupJob
-  def log_api_call(status, error = nil)
-    resp = error || JSON.parse(response.body) || response.body
-
-
-    controller = params['controller']
-    action = params['action']
-
-
-    # FIXME: use .to_json rather than .to_s, because there might be some hacks parsing the log
-    resp = ensure_within_text_length(resp.to_s)
-
-    api_query_log = ApiQueryLog.create!(
-        controller: controller,
-        action: action,
-        params: params.to_s,
-        response: resp,
-        status: status,
-        )
-
-    return if status == 200
-
-    Rails.logger.info "#{controller}##{action}: #{status} #{error&.inspect}"
-
-    return if status != 500
-
-    # logger.error(error)
-    # Rollbar.error(error)
-    # title = "HTTP 500 - #{controller}##{action} #{api_query_log.to_finder}"
-    # SlackHelper.devops.error resp, title: title
-  end
-
-  def ensure_within_text_length(text)
-    return nil if text.nil?
-    return text if text.length < 65_535
-
-    text[0..65_534]
-  end
 end

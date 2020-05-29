@@ -1,43 +1,7 @@
 # Parent class for all API controllers
 class Api::V1::UsersController < Api::V1::BaseController
   before_action :authenticate
-  skip_before_action :authenticate, only: [:update_user_uuid, :helloworld]
 
-  def helloworld
-    database_connection = false
-    require './config/environment.rb' # Assuming the script is located in the root of the rails app
-    begin
-      ActiveRecord::Base.establish_connection # Establishes connection
-      puts 'ActiveRecord::Base.establish_connection Pass!'
-      ActiveRecord::Base.connection # Calls connection object
-      puts 'ActiveRecord::Base.connection pass'
-      database_connection = true if ActiveRecord::Base.connected?
-      puts 'ActiveRecord::Base.connected? pass'
-    rescue
-      puts 'NOT CONNECTED!'
-    end
-
-    render json: {
-      db_host: ENV['DB_HOST'],
-      db_pw: ENV['TRAVELNOGO_DATABASE_PASSWORD'],
-      database_connection: database_connection,
-      message: ENV['HELLO_WORLD']
-    }
-  end
-
-  # def update_user_uuid
-  #   user_data = params['user']
-  #   user_info_data = user_data['user_info']
-  #   @user = User.find_by_email(user_info_data['email'])
-  #   raise AuthenticationError, "User #{User['email']} is not a valid admin email" if @user.nil?
-  #
-  #   @user.firebase_uuid = user_data['firebase_uuid']
-  #   @user.name = user_info_data['name']
-  #   @user.save!
-  #
-  #   render json: @user, serializer: UserSerializer
-  # end
-  
   def check_valid_email
     email = params['email']
     user = User.find_by_email(email)

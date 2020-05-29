@@ -1,5 +1,6 @@
 class Api::V1::ScrapersController < Api::V1::BaseController
   def create_iata_request
+    authenticate_internal
     date = Date.parse(params['date'])
     scrape_data = params['scrape_data']
     scrape_request =
