@@ -38,7 +38,7 @@ module TravelnogoApi
       end
     end
     config.cache_store = :redis_cache_store, {url: "redis://192.168.0.10:6379/0"}
-
+    Dotenv::Railtie.load
     # Settings in config/environments/* take precedence over those specified here.
     # Application configuration can go into files in config/initializers
     # -- all .rb files in that directory are automatically loaded after loading
