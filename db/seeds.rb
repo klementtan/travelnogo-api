@@ -1253,6 +1253,11 @@ raw_country_code = [
     "name":"Zimbabwe",
     "code":"ZW",
     "callingCode":"263"
+  },
+  {
+      "name":"Netherlands Antilles",
+      "code":"AN",
+      "callingCode":"530"
   }
 ]
 

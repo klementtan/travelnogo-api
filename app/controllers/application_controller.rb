@@ -39,6 +39,7 @@ class ApplicationController < ActionController::API;
     data.each do |ban|
       banner = Country.find_by_code(ban['banner']['code'])
       bannee = Country.find_by_code(ban['bannee']['code'])
+
       puts i.to_s + '/' + data.length.to_s
       ban_new = Ban.find_by(banner: banner, bannee: bannee)
       next unless ban_new.nil?
@@ -46,7 +47,7 @@ class ApplicationController < ActionController::API;
       ban_url = ban['ban_url']
       ban_description = ban['ban_description']
       ban_type = ban['ban_type']
-
+      byebug if bannee.nil?
       new_ban = Ban.create!(banner: banner, bannee: bannee, ban_url: ban_url, ban_description: ban_description, ban_type: ban_type)
       new_ban.save!
 

@@ -12,7 +12,7 @@ task :migrate_server, [:endpoint] => [:environment] do |t, args|
     curr_count = 0
     curr_bans = []
     while curr_count < 100 &&  count < all_bans.length
-      ban = all_bans[curr_count]
+      ban = all_bans[count]
       curr_bans.append(ban)
       curr_count+=1
       count+=1
