@@ -16,6 +16,7 @@ gem 'redis'
 gem 'whenever', require: false
 gem 'rails', '~> 6.0.2', '>= 6.0.2.1'
 gem "rolify"
+gem 'slack-ruby-client'
 gem 'firebase_id_token', '~> 2.4.0'
 
 

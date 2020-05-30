@@ -1,6 +1,9 @@
 class Api::V1::ScrapersController < Api::V1::BaseController
   def create_iata_request
     authenticate_internal
+    ini_pending_count = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).length
+    send_slack_message('Received data from scraper...')
+
     date = Date.parse(params['date'])
     scrape_data = params['scrape_data']
     scrape_request =
@@ -38,14 +41,17 @@ class Api::V1::ScrapersController < Api::V1::BaseController
             )
           end
         end
-      rescue Exception => e
-
+      rescue StandardError => e
+        ApiQueryLog.create!(response: e.message)
         #Log
       end
 
 
     end
-
+    send_slack_message('Completed processing scraped data!✅')
+    finial_pending_count = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).length
+    new_pending_count = finial_pending_count - ini_pending_count
+    send_slack_message('Number of new travel restriciton to review: ' + new_pending_count.to_s)
     scrape_request.date = date
     scrape_request.save
     render json: scrape_request, serializer: ScraperRequestSerializer

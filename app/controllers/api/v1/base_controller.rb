@@ -1,7 +1,7 @@
 # Parent class for all API controllers
 class Api::V1::BaseController < ActionController::Base
   skip_before_action :verify_authenticity_token
-  helper_method :authenticate, :decode_firebase_token, :authenticate_internal
+  helper_method :authenticate, :decode_firebase_token, :authenticate_internal, :send_slack_message
   rescue_from Exception, with: :render_500_error
   rescue_from AuthenticationError, with: :render_403_error
   rescue_from AuthorizationError, with: :render_403_error
@@ -16,6 +16,7 @@ class Api::V1::BaseController < ActionController::Base
 
     jwt_token.slice!('Bearer ')
     firebase_user_json = FirebaseIdToken::Signature.verify(jwt_token)
+
     raise AuthenticationError, 'Invalid token' if firebase_user_json.nil?
 
     return firebase_user_json
@@ -35,13 +36,13 @@ class Api::V1::BaseController < ActionController::Base
   end
 
   def authenticate_internal
-    raise AuthenticationError if  request.headers['X-TRAVELNOGO-KEY'] != ENV['X_TRAVELNOGO_KEY']
+    raise AuthenticationError, 'Invallid token' if  request.headers['X-TRAVELNOGO-KEY'] != ENV['X_TRAVELNOGO_KEY']
   end
 
   def render_json_error(error)
     log_api_call(400, error)
     render json: {
-        error: "#{error.record.class.name} record: #{error.message}"
+      error: "#{error.record.class.name} record: #{error.message}"
     },
            status: 400 # Bad Request
   end
@@ -69,6 +70,17 @@ class Api::V1::BaseController < ActionController::Base
   def render_404_error(error)
     log_api_call(404, error)
     render json: {error: error.message}, status: 404 # Not Found
+  end
+
+  def send_slack_message(message)
+    body = {
+      "text": message
+    }
+    HTTParty.post(ENV['SLACK_URL'],
+                  {
+                    body: body.to_json,
+                    headers: { 'Content-Type' => 'application/json', 'Accept' => 'application/json'}
+                  })
   end
 
   protected
