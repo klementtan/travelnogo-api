@@ -9,4 +9,3 @@ if [[ $RAILS_ENV == "production" ]]; then
   EDITOR="mate --wait" bundle exec rails credentials:edit
 fi
 
-bundle exec rails server -b 0.0.0.0 -p 80

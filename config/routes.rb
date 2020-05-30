@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  get '/' => 'application#check'
   namespace :api do
     namespace :v1 do
 
@@ -26,7 +27,6 @@ Rails.application.routes.draw do
       get '/user/check_valid_email' => 'users#check_valid_email'
       post '/user/firebase' => 'users#update_user_uuid'
 
-      get '/utils/check_liveness' => 'utils#check_liveness'
       get '/utils/health_check' => 'utils#health_check'
       get '/utils/all_api_logs' => 'utils#all_api_logs'
       post '/utils/migrate_server' => 'utils#migrate_server'

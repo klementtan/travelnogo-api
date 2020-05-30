@@ -23,8 +23,6 @@ RUN gem install bundler && bundle install --jobs 20 --retry 5
 # Copying local always changes, therefore put it last
 COPY . ./
 
-# Pre-compile assets
-RUN EDITOR="mate --wait" bundle exec rails credentials:edit
 
 ENV RAILS_ENV production
 

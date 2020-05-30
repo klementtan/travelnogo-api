@@ -36,12 +36,6 @@ class Api::V1::UtilsController < Api::V1::BaseController
     }
   end
 
-  def check_liveness
-    render json: {
-        message: 'ok'
-    }
-
-  end
 
   def all_api_logs
     render json: ApiQueryLog.all
