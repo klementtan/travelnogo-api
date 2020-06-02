@@ -16,9 +16,9 @@ jobs:
           TEST_POSTGRESQL_HOST: 127.0.0.1
       - image: postgres:9.6
         environment:
-          POSTGRES_DB: root 
+          POSTGRES_DB: travelnogo_api_test 
           POSTGRES_USER: postgres
-          POSTGRES_PASSWORD: travelnogo_api_test
+          POSTGRES_PASSWORD: root
       - image: redis
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
