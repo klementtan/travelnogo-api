@@ -43,7 +43,7 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: bin/rails db:schema:load --trace
+          command: bin/rails db:schema:load --trace RAILS_ENV=test TEST_POSTGRES_PASSWORD=root TEST_POSTGRES_USER=postgres
       - run:
           name: Run rspec in parallel
           command: |
