@@ -16,7 +16,6 @@ jobs:
       - image: postgres:9.6
         environment:
           POSTGRES_PASSWORD: root
-          POSTGRES_HOST_AUTH_METHOD: trust
       - image: redis
     steps: # a collection of executable commands
       - checkout # special step to check out source code to working directory
