@@ -29,6 +29,7 @@ test:
   username: <%= ENV['TEST_POSTGRES_USER'] %>
   password: <%= ENV['TEST_POSTGRES_PASSWORD'] %>
   database: travelnogo_api_test
+  host: <%= ENV['TEST_POSTGRESQL_HOST'] %>
 
 # As with config/credentials.yml, you never want to store sensitive information,
 # like your database password, in your source code. If your source code is

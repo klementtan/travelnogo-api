@@ -13,6 +13,7 @@ jobs:
           RAILS_ENV: test
           TEST_POSTGRES_PASSWORD: root
           TEST_POSTGRES_USER: postgres
+          TEST_POSTGRESQL_HOST: 127.0.0.1
       - image: postgres:9.6
         environment:
           POSTGRES_DB: root 
@@ -44,7 +45,7 @@ jobs:
           command: dockerize -wait tcp://localhost:5432 -timeout 1m
       - run:
           name: Database setup
-          command: bin/rails db:schema:load --trace RAILS_ENV=test TEST_POSTGRES_PASSWORD=root TEST_POSTGRES_USER=postgres
+          command: bin/rails db:schema:load --trace
       - run:
           name: Run rspec in parallel
           command: |
