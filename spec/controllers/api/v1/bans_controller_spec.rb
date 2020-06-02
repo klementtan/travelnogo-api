@@ -13,7 +13,7 @@ RSpec.describe 'Bans Controller', type: :request do
   describe 'Create Ban' do
     it 'Should Create new Ban' do
 
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'CN',
@@ -22,6 +22,7 @@ RSpec.describe 'Bans Controller', type: :request do
                'Individuals from China not allowed into the country'
            }
       ban = JSON.parse(response.body)['ban']
+      
       expect(ban['ban_type']).to eq('FULL_BAN')
       expect(ban['ban_description']).to eq(
         'Individuals from China not allowed into the country'
@@ -29,7 +30,7 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'Should Create many new Ban' do
-      post '/api/v1/many_ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/many_ban' ,
            params: {
              "banner": 'AL',
              "bannee": %w[CN US SG],
@@ -43,7 +44,7 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'It should replace old Ban' do
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'CN',
@@ -51,7 +52,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description":
                'Individuals from China not allowed into the country'
            }
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'CN',
@@ -68,7 +69,7 @@ RSpec.describe 'Bans Controller', type: :request do
 
   describe 'Get ban details' do
     it 'Get Country Banner' do
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'CN',
@@ -76,7 +77,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description":
                'Individuals from China not allowed into the country'
            }
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'US',
              "bannee": 'CN',
@@ -84,7 +85,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description": 'Lorem Ipsum'
            }
 
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'SG',
              "bannee": 'CN',
@@ -99,7 +100,7 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'Get all country that has travel restriction from country ___' do
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'CN',
@@ -107,7 +108,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description":
                'Individuals from China not allowed into the country'
            }
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'SG',
@@ -115,7 +116,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description":
                'Individuals from China not allowed into the country'
            }
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'US',
@@ -131,7 +132,7 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'Get many specific ban  ' do
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'CN',
@@ -139,7 +140,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description":
                'Individuals from China not allowed into the country'
            }
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'SG',
@@ -147,7 +148,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description":
                'Individuals from China not allowed into the country'
            }
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'US',
@@ -155,7 +156,7 @@ RSpec.describe 'Bans Controller', type: :request do
              "ban_description":
                'Individuals from China not allowed into the country'
            }
-      post '/api/v1/ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/ban',
            params: {
              "banner": 'AL',
              "bannee": 'VN',
@@ -187,7 +188,7 @@ RSpec.describe 'Bans Controller', type: :request do
             }
           }
         }
-      post '/api/v1/many_ban?X_TRAVELNOGO_KEY=' + ENV['X_TRAVELNOGO_KEY'],
+      post '/api/v1/many_ban',
         params: {
           "banner": 'AF',
           "bannee": %w[CN],

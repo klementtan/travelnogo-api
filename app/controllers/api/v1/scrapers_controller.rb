@@ -2,8 +2,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
   def create_iata_request
     authenticate_internal
     ini_pending_count = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).length
-    send_slack_message('Received data from scraper...')
-
+    send_slack_message('Received data from scraper...') 
     date = Date.parse(params['date'])
     scrape_data = params['scrape_data']
     scrape_request =

@@ -59,13 +59,12 @@ RSpec.describe 'Bans Controller', type: :request do
       user = User.create!(email: 'klement.tandn@gmail.com').add_role AuthorizationRoles::SUPER_ADMIN
       user.save
 
-      post '/api/v1/user/', :params => { :new_admin_email => ["klementspy@gmail.com", "klementtabn@gmail.com"]}, as: :json, headers:{ Authorization: 'Bearer foobar'}
-
+      post '/api/v1/user/', :params => { :new_admins => [{:email => "klementspy@gmail.com", :role => "super_admin"}, {:email => "klementtabn@gmail.com", :role => "admin"}]}, as: :json, headers:{ Authorization: 'Bearer foobar'}
       expect(response.status).to eq(200)
       response_json = JSON.parse(response.body)
       expect(response_json[0]['email']).to eq('klementspy@gmail.com')
       expect(response_json[0]['name']).to eq(nil)
-      expect(response_json[0]['role']).to eq('admin')
+      expect(response_json[0]['role']).to eq('super_admin')
       expect(response_json[1]['email']).to eq('klementtabn@gmail.com')
       expect(response_json[1]['name']).to eq(nil)
       expect(response_json[1]['role']).to eq('admin')

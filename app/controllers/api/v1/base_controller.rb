@@ -73,6 +73,7 @@ class Api::V1::BaseController < ActionController::Base
   end
 
   def send_slack_message(message)
+    return unless Rails.env == 'production'
     body = {
       "text": message
     }
