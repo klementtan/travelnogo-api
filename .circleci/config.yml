@@ -11,8 +11,11 @@ jobs:
         environment:
           REDIS_URL: redis://localhost:6379
           RAILS_ENV: test
-      - image: postgres:9.5
+          TEST_POSTGRES_PASSWORD: root
+          TEST_POSTGRES_USER: postgres
+      - image: postgres:9.6
         environment:
+          POSTGRES_PASSWORD: root
           POSTGRES_HOST_AUTH_METHOD: trust
       - image: redis
     steps: # a collection of executable commands
