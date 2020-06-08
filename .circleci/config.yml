@@ -20,7 +20,7 @@ workflows:
           post-deploy:
             - run:
                 name: Update Slack
-                command: ./circleci/update_slack.sh
+                command: ./.circleci/update_slack.sh
 
 jobs:
   build:
