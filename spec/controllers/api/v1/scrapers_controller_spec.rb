@@ -20,6 +20,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                    "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                }
              }
+           },
+           headers: {
+             "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
            }
       response_json = JSON.parse(response.body)
       expect(response_json['date']).to eq('12.05.2020')
@@ -57,6 +60,8 @@ RSpec.describe 'Scraper Controller', type: :request do
                    "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                }
              }
+           }, headers: {
+             "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
            }
       
       response_json = JSON.parse(response.body)
@@ -122,7 +127,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                      "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                  }
                }
-             }
+             }, headers: {
+                "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+            }
         n -= 1
         end
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::OUTDATED).length).to eq(9)
@@ -142,7 +149,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                    "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                }
              }
-           }
+           }, headers: {
+              "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+          }
       response_json = JSON.parse(response.body)
       scraper_ban_requests = response_json['scraper_ban_requests']
       scraper_ban_request = scraper_ban_requests[0]
@@ -163,7 +172,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                    "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                }
              }
-           }
+           }, headers: {
+              "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+          }
 
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::DONE).length).to eq(2)
     end
@@ -181,7 +192,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                    "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                }
              }
-           }
+           }, headers: {
+              "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+          }
       response_json = JSON.parse(response.body)
       scraper_ban_requests = response_json['scraper_ban_requests']
       scraper_ban_request = scraper_ban_requests[0]
@@ -202,7 +215,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                    "Lorem Ipsum"
                }
              }
-           }
+           }, headers: {
+              "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+          }
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::DONE).length).to eq(1)
       expect(ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).length).to eq(1)
     end
@@ -221,7 +236,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                      "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                  }
                }
-             }
+             }, headers: {
+                "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+            }
         get '/api/v1/scraper'
         pending_review_arr = JSON.parse(response.body)['AF']
         expect(pending_review_arr.length).to be(3)
@@ -252,7 +269,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                      "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
                  }
                }
-             }
+             }, headers: {
+                "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+            }
           ScraperBanRequest.find_by(banner: Country.find_by_code("AF"), bannee: Country.find_by_code("SG")).status = ScraperRequestStatus::DONE
           post '/api/v1/scraper/iata',
                params: {
@@ -266,7 +285,9 @@ RSpec.describe 'Scraper Controller', type: :request do
                        "Lorem Ipsum"
                    }
                  }
-               }
+               }, headers: {
+                  "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+              }
         get '/api/v1/scraper'
         pending_review_arr = JSON.parse(response.body)["AF"]
         expect(pending_review_arr.length).to be(3)

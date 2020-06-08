@@ -47,17 +47,6 @@ RSpec.configure do |config|
   # triggering implicit auto-inclusion in groups with matching metadata.
   config.shared_context_metadata_behavior = :apply_to_host_groups
 
-  original_stderr = $stderr
-  original_stdout = $stdout
-  config.before(:all) do
-    # Redirect stderr and stdout
-    $stderr = File.open(File::NULL, "w")
-    $stdout = File.open(File::NULL, "w")
-  end
-  config.after(:all) do
-    $stderr = original_stderr
-    $stdout = original_stdout
-  end
 
   # The settings below are suggested to provide a good initial experience
   # with RSpec, but feel free to customize to your heart's content.

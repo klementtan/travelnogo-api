@@ -187,7 +187,10 @@ RSpec.describe 'Bans Controller', type: :request do
                 "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
             }
           }
-        }
+        }, headers: {
+               "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
+           }
+
       post '/api/v1/many_ban',
         params: {
           "banner": 'AF',
@@ -196,6 +199,7 @@ RSpec.describe 'Bans Controller', type: :request do
           "ban_description":
             'Individuals from CN US and SG not allowed into the country'
         }
+
       expect(ScraperBanRequest.find_by(banner: Country.find_by_code('AF'), bannee: Country.find_by_code('CN')).status).to eq(ScraperRequestStatus::DONE)
     end
   end
