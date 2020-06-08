@@ -14,7 +14,7 @@ class Api::V1::BansController < Api::V1::BaseController
   end
 
   def create_many
-    # authenticate
+    authenticate
     banner = Country.find_by_code(params[:banner])
 
     bans = []
