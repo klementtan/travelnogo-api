@@ -1,0 +1,1 @@
+curl -X POST -H 'Content-type: application/json' --data '{"text":"Successfully deployed to heroku"}' $SLACK_URL
