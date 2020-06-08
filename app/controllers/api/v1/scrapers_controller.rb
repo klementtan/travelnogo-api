@@ -1,6 +1,7 @@
 class Api::V1::ScrapersController < Api::V1::BaseController
   def create_iata_request
     authenticate_internal
+    REDIS.del("pending_review")
     ini_pending_count = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).length
     send_slack_message('Received data from scraper...') 
     date = Date.parse(params['date'])
@@ -57,6 +58,10 @@ class Api::V1::ScrapersController < Api::V1::BaseController
   end
 
   def get_pending_review
+    if REDIS.get("pending_review")
+      render json: REDIS.get("pending_review")
+      return
+    end
     pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:banner_id)
     ban_request_ptr = 0
     curr_banner = pending_reviews[ban_request_ptr].banner
@@ -75,7 +80,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
       ban_request_ptr+=1
     end
     response[curr_banner.code] = curr_banner_pending_review if response.empty? && !curr_banner_pending_review.empty?
-
+    REDIS.set "pending_review", response.to_json
     render json: response
   end
 

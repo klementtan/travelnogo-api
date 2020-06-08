@@ -14,8 +14,7 @@ class Api::V1::BansController < Api::V1::BaseController
   end
 
   def create_many
-    authenticate
-
+    # authenticate
     banner = Country.find_by_code(params[:banner])
 
     bans = []
@@ -23,6 +22,7 @@ class Api::V1::BansController < Api::V1::BaseController
 
     params[:bannee].each do |bannee_code|
       #update actual ban
+      REDIS.del("get_country_banner/bannee: #{bannee_code}", "pending_review")
       bannee = Country.find_by_code(bannee_code)
       ban = Ban.find_by(banner: banner, bannee: bannee)
       next if banner == bannee
@@ -38,7 +38,12 @@ class Api::V1::BansController < Api::V1::BaseController
   end
 
   def get_country_banner
+
     country = Country.find_by_code(params[:bannee])
+    if REDIS.get("get_country_banner/bannee: #{country.code}")
+      render json: { bans: JSON.parse(REDIS.get("get_country_banner/bannee: #{country.code}"))}
+      return
+    end
     bans = Ban.where(bannee: country).order(:banner_id)
     bans.order(:bannee)
     bans_json = JSON.parse(bans.to_json)
@@ -48,7 +53,7 @@ class Api::V1::BansController < Api::V1::BaseController
       banner_code = Country.find(banner_id).code
       ban['banner_code'] = banner_code
     end
-    bans_json
+    REDIS.set("get_country_banner/bannee: #{country.code}", bans_json.to_json)
     render json: { bans: bans_json }
   end
 
