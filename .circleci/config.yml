@@ -19,8 +19,9 @@ workflows:
               only: master
           post-deploy:
             - run:
-              name: Update Slack
-              command: ./.circleci/update_slack.sh
+                name: Update Slack
+                command: ./circleci/update_slack.sh
+
 jobs:
   build:
     docker:
