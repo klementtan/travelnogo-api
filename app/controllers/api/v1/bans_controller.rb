@@ -134,5 +134,11 @@ class Api::V1::BansController < Api::V1::BaseController
       scraper_ban_request.status = ScraperRequestStatus::DONE
       scraper_ban_request.save
     end
+    all_country = Country.find_by_code("ALL")
+    scraper_ban_request_all = ScraperBanRequest.find_by(banner: banner, bannee: all_country, status: ScraperRequestStatus::PENDING_REVIEW)
+    unless scraper_ban_request_all.nil?
+      scraper_ban_request_all.status = ScraperRequestStatus::DONE
+      scraper_ban_request_all.save
+    end
   end
 end

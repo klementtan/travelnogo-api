@@ -1,18 +1,14 @@
 require 'rails_helper'
 
 RSpec.describe 'Bans Controller', type: :request do
-  before(:all) {
-    Rails.application.load_seed
-
-  }
-  before(:each) {
-    allow_any_instance_of(Api::V1::BaseController).to receive(:authenticate).and_return(true)
+  before(:all) { Rails.application.load_seed }
+  before(:each) do
+    allow_any_instance_of(Api::V1::BaseController).to receive(:authenticate)
+      .and_return(true)
     ScraperRequest.destroy_all
-
-  }
+  end
   describe 'Create Ban' do
     it 'Should Create new Ban' do
-
       post '/api/v1/ban',
            params: {
              "banner": 'AL',
@@ -22,7 +18,7 @@ RSpec.describe 'Bans Controller', type: :request do
                'Individuals from China not allowed into the country'
            }
       ban = JSON.parse(response.body)['ban']
-      
+
       expect(ban['ban_type']).to eq('FULL_BAN')
       expect(ban['ban_description']).to eq(
         'Individuals from China not allowed into the country'
@@ -30,7 +26,7 @@ RSpec.describe 'Bans Controller', type: :request do
     end
 
     it 'Should Create many new Ban' do
-      post '/api/v1/many_ban' ,
+      post '/api/v1/many_ban',
            params: {
              "banner": 'AL',
              "bannee": %w[CN US SG],
@@ -174,33 +170,68 @@ RSpec.describe 'Bans Controller', type: :request do
   end
 
   describe 'Integration test with scraper request' do
-    it 'Should Create new Ban' do
+    it 'Should update the travel restriction to done when new scraper added' do
       post '/api/v1/scraper/iata',
-        params: {
-          "date": '12.05.2020',
-          "scrape_data": {
-            "AFGHANISTAN": {
-              "ISO2": 'AF',
-              "published_date": '24.04.2020',
-              "possible_bannees": ['CN'],
-              "info":
-                "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
-            }
-          }
-        }, headers: {
-               "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY']
-           }
+           params: {
+             "date": '12.05.2020',
+             "scrape_data": {
+               "AFGHANISTAN": {
+                 "ISO2": 'AF',
+                 "published_date": '24.04.2020',
+                 "possible_bannees": %w[CN],
+                 "info":
+                   "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+               }
+             }
+           },
+           headers: { "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY'] }
 
       post '/api/v1/many_ban',
-        params: {
-          "banner": 'AF',
-          "bannee": %w[CN],
-          "ban_type": 'FULL_BAN',
-          "ban_description":
-            'Individuals from CN US and SG not allowed into the country'
-        }
+           params: {
+             "banner": 'AF',
+             "bannee": %w[CN],
+             "ban_type": 'FULL_BAN',
+             "ban_description":
+               'Individuals from CN US and SG not allowed into the country'
+           }
 
-      expect(ScraperBanRequest.find_by(banner: Country.find_by_code('AF'), bannee: Country.find_by_code('CN')).status).to eq(ScraperRequestStatus::DONE)
+      expect(
+        ScraperBanRequest.find_by(
+          banner: Country.find_by_code('AF'), bannee: Country.find_by_code('CN')
+        ).status
+      ).to eq(ScraperRequestStatus::DONE)
+    end
+
+    it 'Should update scraper request on all countries when updated' do
+      post '/api/v1/scraper/iata',
+           params: {
+             "date": '12.05.2020',
+               "scrape_data": {
+                 "AFGHANISTAN": {
+                   "ISO2": 'AF',
+                     "published_date": '24.04.2020',
+                     "possible_bannees": %w[ALL],
+                     "info":
+                         "Flights to Afghanistan are suspended.\n- This does not apply to repatriation flights that bring back nationals of Afghanistan.\n"
+                 }
+               }
+           },
+           headers: { "X-TRAVELNOGO-KEY": ENV['X_TRAVELNOGO_KEY'] }
+
+      post '/api/v1/many_ban',
+           params: {
+             "banner": 'AF',
+               "bannee": %w[CN],
+               "ban_type": 'FULL_BAN',
+               "ban_description":
+                   'Individuals from CN US and SG not allowed into the country'
+           }
+
+      expect(
+          ScraperBanRequest.find_by(
+              banner: Country.find_by_code('AF'), bannee: Country.find_by_code('ALL')
+          ).status
+      ).to eq(ScraperRequestStatus::DONE)
     end
   end
 end

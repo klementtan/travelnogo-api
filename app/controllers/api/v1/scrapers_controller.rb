@@ -62,7 +62,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
       render json: REDIS.get("pending_review")
       return
     end
-    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:banner_id)
+    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:created_at)
     ban_request_ptr = 0
     curr_banner = pending_reviews[ban_request_ptr].banner
     curr_banner_pending_review = []
