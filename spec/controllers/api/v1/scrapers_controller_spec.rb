@@ -310,7 +310,7 @@ RSpec.describe 'Scraper Controller', type: :request do
         post '/api/v1/scraper/resolve',
              params: {
                  "banner_code": "AW",
-                 "banne_codes": ["ALL"]
+                 "bannee_codes": ["ALL"]
              }
         expect( response.status).to be(403)
         expect(JSON.parse(response.body)['error']).to eq('Bearer Token empty')
@@ -331,7 +331,7 @@ RSpec.describe 'Scraper Controller', type: :request do
         post '/api/v1/scraper/resolve',
              params: {
                  "banner_code": "SG",
-                 "banne_codes": ["CN", "US"]
+                 "bannee_codes": ["CN", "US"]
              }
         expect( response.status).to eq(200)
         expect(JSON.parse(response.body)[0]["status"]).to eq(ScraperRequestStatus::DONE)

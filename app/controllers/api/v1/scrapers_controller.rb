@@ -60,7 +60,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
   def resolve_scraper_request
     authenticate
     banner = Country.find_by_code(params['banner_code'])
-    bannee_codes = params['banne_codes']
+    bannee_codes = params['bannee_codes']
     updated_scraper_ban_request = []
     bannee_codes.each do |banne_code|
       bannee = Country.find_by_code(banne_code)
@@ -80,7 +80,8 @@ class Api::V1::ScrapersController < Api::V1::BaseController
   end
 
   def get_pending_review
-    if REDIS.get("pending_review")
+
+    unless REDIS.get("pending_review").nil?
       render json: REDIS.get("pending_review")
       return
     end
@@ -110,7 +111,7 @@ class Api::V1::ScrapersController < Api::V1::BaseController
     pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:banner_id)
     ban_request_ptr = 0
     curr_banner = pending_reviews[ban_request_ptr].banner
-    curr_count = 0;
+    curr_count = 0
     curr_banner_pending_review = []
     response = {}
     while ban_request_ptr < pending_reviews.length
