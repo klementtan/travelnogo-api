@@ -4,12 +4,11 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    command: bundle exec rails s -p 3000 -b '0.0.0.0'
+    command: bundle exec rails s -p 80 -b '0.0.0.0'
     ports:
       - "80:80"
     depends_on:
       - redis
-    env_file: .env.prod.docker
     environment:
       RAILS_MAX_THREADS: 8
       REDIS_HOST: redis

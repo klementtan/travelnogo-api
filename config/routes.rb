@@ -19,6 +19,7 @@ Rails.application.routes.draw do
 
       post '/scraper/iata' => 'scrapers#create_iata_request'
       get '/scraper' => 'scrapers#get_pending_review'
+      post '/scraper/resolve' => 'scrapers#resolve_scraper_request'
       get '/scraper/overview' => 'scrapers#get_pending_review_overview'
 
       get '/users/' => 'users#get_all_users'

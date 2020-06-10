@@ -243,15 +243,15 @@ RSpec.describe 'Scraper Controller', type: :request do
         pending_review_arr = JSON.parse(response.body)['AF']
         expect(pending_review_arr.length).to be(3)
         
-        pending_review_sg = pending_review_arr[0]
+        pending_review_sg = pending_review_arr[2]
         expect(pending_review_sg["bannee"]["code"]).to eq("SG")
         expect(pending_review_sg["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
 
-        pending_review_us = pending_review_arr[1]
+        pending_review_us = pending_review_arr[0]
         expect(pending_review_us["bannee"]["code"]).to eq("US")
         expect(pending_review_us["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
 
-        pending_review_cn = pending_review_arr[2]
+        pending_review_cn = pending_review_arr[1]
         expect(pending_review_cn["bannee"]["code"]).to eq("CN")
         expect(pending_review_cn["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
       end
@@ -304,6 +304,38 @@ RSpec.describe 'Scraper Controller', type: :request do
         pending_review_cn = pending_review_arr[2]
         expect(pending_review_cn["bannee"]["code"]).to eq("CN")
         expect(pending_review_cn["status"]).to eq(ScraperRequestStatus::PENDING_REVIEW)
+      end
+
+      it 'Should authenticate for resolve review' do
+        post '/api/v1/scraper/resolve',
+             params: {
+                 "banner_code": "AW",
+                 "banne_codes": ["ALL"]
+             }
+        expect( response.status).to be(403)
+        expect(JSON.parse(response.body)['error']).to eq('Bearer Token empty')
+      end
+
+      it 'Should resolve pending review' do
+        allow_any_instance_of(Api::V1::BaseController).to receive(:authenticate)
+          .and_return(true)
+
+        scraper_request = ScraperRequest.create!(source: ScraperSources::IATA, date:  Date.parse("21.04.2020"))
+        scraper_request.scraper_ban_requests.create!(
+            banner: Country.find_by_code("SG"), bannee: Country.find_by_code("CN"), ban_description: "foo", status: ScraperRequestStatus::PENDING_REVIEW, published_date: Date.parse("21.04.2020")
+        )
+        scraper_request.scraper_ban_requests.create!(
+            banner: Country.find_by_code("SG"), bannee: Country.find_by_code("US"), ban_description: "foo", status: ScraperRequestStatus::PENDING_REVIEW, published_date: Date.parse("21.04.2020")
+        )
+
+        post '/api/v1/scraper/resolve',
+             params: {
+                 "banner_code": "SG",
+                 "banne_codes": ["CN", "US"]
+             }
+        expect( response.status).to eq(200)
+        expect(JSON.parse(response.body)[0]["status"]).to eq(ScraperRequestStatus::DONE)
+        expect(JSON.parse(response.body)[1]["status"]).to eq(ScraperRequestStatus::DONE)
       end
     end
   end

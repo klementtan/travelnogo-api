@@ -57,12 +57,34 @@ class Api::V1::ScrapersController < Api::V1::BaseController
     render json: scrape_request, serializer: ScraperRequestSerializer
   end
 
+  def resolve_scraper_request
+    authenticate
+    banner = Country.find_by_code(params['banner_code'])
+    bannee_codes = params['banne_codes']
+    updated_scraper_ban_request = []
+    bannee_codes.each do |banne_code|
+      bannee = Country.find_by_code(banne_code)
+      scraper_ban_requests = ScraperBanRequest.where(banner: banner, bannee: bannee, status: ScraperRequestStatus::PENDING_REVIEW)
+      next if scraper_ban_requests.empty?
+
+      scraper_ban_requests.each do |scraper_ban_request|
+        scraper_ban_request.status = ScraperRequestStatus::DONE
+        scraper_ban_request.save
+        updated_scraper_ban_request.push(scraper_ban_request)
+      end
+
+    end
+
+    render json: updated_scraper_ban_request, each_serializer: ScraperBanRequestSerializer
+
+  end
+
   def get_pending_review
     if REDIS.get("pending_review")
       render json: REDIS.get("pending_review")
       return
     end
-    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:created_at)
+    pending_reviews = ScraperBanRequest.where(status: ScraperRequestStatus::PENDING_REVIEW).order(:banner_id)
     ban_request_ptr = 0
     curr_banner = pending_reviews[ban_request_ptr].banner
     curr_banner_pending_review = []
