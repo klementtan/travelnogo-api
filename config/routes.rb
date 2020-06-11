@@ -28,6 +28,8 @@ Rails.application.routes.draw do
       get '/user/check_valid_email' => 'users#check_valid_email'
       post '/user/firebase' => 'users#update_user_uuid'
 
+      get '/utils/maintenance_check' => 'utils#maintenance_check'
+      post '/utils/maintenance_check_and_resolve' => 'utils#maintenance_check_and_resolve'
       get '/utils/health_check' => 'utils#health_check'
       get '/utils/all_api_logs' => 'utils#all_api_logs'
       post '/utils/migrate_server' => 'utils#migrate_server'

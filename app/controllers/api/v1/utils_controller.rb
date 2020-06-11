@@ -36,6 +36,48 @@ class Api::V1::UtilsController < Api::V1::BaseController
     }
   end
 
+  def maintenance_check
+
+    all_bans = Ban.all
+
+    same_banner_bannee = []
+
+    invalid_ban = []
+
+    all_bans.each do |curr_ban|
+      same_banner_bannee.append(BanSerializer.new(curr_ban).serializable_hash) if curr_ban.banner == curr_ban.bannee
+      invalid_ban.append(BanSerializer.new(curr_ban).serializable_hash) if curr_ban.banner.nil? || curr_ban.bannee.nil?
+    end
+
+    maintenance_status = "not ok"
+    maintenance_status = "ok" if same_banner_bannee.empty? && invalid_ban.empty?
+
+    render json: {
+        "same_banner_bannee": same_banner_bannee,
+        "invalid_ban": invalid_ban,
+        "status": maintenance_status
+    }
+  end
+
+  def maintenance_check_and_resolve
+
+    all_bans = Ban.all
+
+    same_banner_bannee = []
+
+    all_bans.each do |curr_ban|
+      if curr_ban.banner == curr_ban.bannee
+        same_banner_bannee.append(BanSerializer.new(curr_ban).serializable_hash)
+        curr_ban.destroy!
+      end
+    end
+
+    render json: {
+        "same_banner_bannee": same_banner_bannee,
+        "status": "not ok"
+    }
+  end
+
 
   def all_api_logs
     render json: ApiQueryLog.all
