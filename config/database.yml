@@ -32,21 +32,21 @@ test:
   host: <%= ENV['TEST_POSTGRESQL_HOST'] %>
 
 #Heroku db config
-production:
-  adapter: postgresql
-  encoding: unicode
-  database: travelnogo_api_production
-  username: travelnogo_api
-  password: <%= ENV['TRAVELNOGO_API_DATABASE_PASSWORD'] %>
+# production:
+#   adapter: postgresql
+#   encoding: unicode
+#   database: travelnogo_api_production
+#   username: travelnogo_api
+#   password: <%= ENV['TRAVELNOGO_API_DATABASE_PASSWORD'] %>
 
 #Kube db config
-# production:
-#  <<: *default
-#  host: ENV['PROD_DB_HOST']
-#  username: ENV['PROD_DB_USERNAME'] 
-#  password: ENV['PROD_DB_PASSWORD'] 
-#  pool: 5
-#  database: travelnogo_api_production
+production:
+ <<: *default
+ host: <%= ENV['PROD_DB_HOST'] %>
+ username: <%= ENV['PROD_DB_USERNAME'] %>
+ password: <%= ENV['PROD_DB_PASSWORD'] %>
+ pool: 5
+ database: <%= ENV['PROD_DB'] %>
 
 #staging:
 #  adapter: postgresql
