@@ -11,16 +11,16 @@ workflows:
   heroku_deploy:
     jobs:
       - build
-      # - heroku/deploy-via-git: # Use the pre-configured job, deploy-via-git
-      #     requires:
-      #       - build
-      #     filters:
-      #       branches:
-      #         only: master
-      #     post-deploy:
-      #       - run:
-      #           name: Update Slack
-      #           command: ./.circleci/update_slack.sh
+      - deploy: # Use the pre-configured job, deploy-via-git
+          requires:
+            - build
+          filters:
+            branches:
+              only: master
+          post-deploy:
+            - run:
+                name: Update Slack
+                command: ./.circleci/update_slack.sh
 
 jobs:
   build:
@@ -69,3 +69,11 @@ jobs:
           name: Run rspec in parallel
           command: |
             bundle exec rspec
+  deploy:
+     machine:
+       enabled: true
+     steps:
+       - run:
+           name: Deploy Over SSH
+           command: |
+             ssh $SSH_USER@$SSH_HOST "cd travelnogo-api && ./script/deploy.sh"

@@ -1,6 +1,6 @@
 class Api::V1::UtilsController < Api::V1::BaseController
   before_action :authenticate_internal
-  skip_before_action :authenticate_internal, only: [:check_liveness, :migrate_server]
+  skip_before_action :authenticate_internal, only: [:check_liveness]
 
   def health_check
     #Check db connection
