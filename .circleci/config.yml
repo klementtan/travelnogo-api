@@ -4,11 +4,9 @@
 #
 version: 2.1
 
-orbs:
-  heroku: circleci/heroku@1.0.1
 
 workflows:
-  heroku_deploy:
+  do_deploy:
     jobs:
       - build
       - deploy: # Use the pre-configured job, deploy-via-git
@@ -17,10 +15,6 @@ workflows:
           filters:
             branches:
               only: master
-          post-deploy:
-            - run:
-                name: Update Slack
-                command: ./.circleci/update_slack.sh
 
 jobs:
   build:
@@ -77,3 +71,6 @@ jobs:
            name: Deploy Over SSH
            command: |
              ssh $SSH_USER@$SSH_HOST "cd travelnogo-api && ./script/deploy.sh"
+       - run:
+            name: Update Slack
+            command: ./.circleci/update_slack.sh
