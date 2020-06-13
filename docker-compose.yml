@@ -13,6 +13,8 @@ services:
       RAILS_MAX_THREADS: 8
       REDIS_HOST: redis
       REDIS_URL: redis://redis:6379/0
+    env_file: 
+      - .env
   redis:
     image: redis:alpine
     ports:

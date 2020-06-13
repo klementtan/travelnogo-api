@@ -28,6 +28,8 @@ ENV RAILS_ENV production
 
 CMD bash script/start_web.sh
 
+RUN EDITOR="mate --wait" bundle exec rails credentials:edit
+
 
 #FROM ruby:2.6.4
 #
