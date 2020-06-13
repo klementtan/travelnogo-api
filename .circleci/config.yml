@@ -4,6 +4,8 @@
 #
 version: 2.1
 
+orbs:
+  slack: circleci/slack@3.4.2
 
 workflows:
   do_deploy:
@@ -74,6 +76,7 @@ jobs:
            name: Deploy Over SSH
            command: |
              ssh $SSH_USER@$SSH_HOST "cd travelnogo-api && ./script/deploy.sh"
-       - run:
-            name: Update Slack
-            command: ./.circleci/update_slack.sh
+       - slack/status:
+          success_message: 'Deployed to digital ocean ✅'
+          failure_message: 'Failed to deploy to digital ocean ❌'
+          webhook: '${SLACK_WEBHOOK}'
