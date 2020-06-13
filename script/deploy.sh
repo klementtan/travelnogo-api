@@ -1,3 +1,3 @@
 git pull
 
-docker-compose up --build --no-deps web
+docker-compose up --build --no-deps -d web
