@@ -59,13 +59,13 @@ production:
   password: <%= ENV['TRAVELNOGO_API_DATABASE_PASSWORD'] %>
 
 #Kube db config
-#production:
+# production:
 #  <<: *default
-#  host: <%#= ENV['POSTGRESQL_HOST'] %>
-#  username: <%#= ENV['POSTGRESQL_USER_NAME'] %>
-#  password: <%#= ENV['POSTGRESQL_PASSWORD'] %>
+#  host: ENV['PROD_DB_HOST']
+#  username: ENV['PROD_DB_USERNAME'] 
+#  password: ENV['PROD_DB_PASSWORD'] 
 #  pool: 5
-#  database: <%#= ENV['POSTGRESQL_DB'] %>
+#  database: travelnogo_api_production
 
 #staging:
 #  adapter: postgresql
