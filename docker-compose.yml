@@ -16,6 +16,11 @@ services:
     env_file: 
       - .env
   redis:
-    image: redis:alpine
-    ports:
-      - "6379:6379"
+    image: "redis:alpine"
+    command: redis-server
+    expose:
+      - "6379"
+    env_file:
+      - .env
+    environment:
+      - REDIS_REPLICATION_MODE=master
