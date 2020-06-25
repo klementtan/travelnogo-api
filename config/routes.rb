@@ -33,6 +33,7 @@ Rails.application.routes.draw do
       get '/utils/health_check' => 'utils#health_check'
       get '/utils/all_api_logs' => 'utils#all_api_logs'
       post '/utils/migrate_server' => 'utils#migrate_server'
+      get '/utils/countries' => 'utils#get_all_countries'
     end
   end
 end

@@ -115,5 +115,8 @@ class Api::V1::UtilsController < Api::V1::BaseController
     }
   end
 
+  def get_all_countries
+    render json: Country.all
+  end
 
 end
