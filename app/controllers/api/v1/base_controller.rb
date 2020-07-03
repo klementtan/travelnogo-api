@@ -85,18 +85,11 @@ class Api::V1::BaseController < ActionController::Base
   end
 
   protected
-  # API Query Logs are cleared every three months. Look at task_scheduler.rb and XfersDailyCleanupJob
   def log_api_call(status, error = nil)
     resp = error || JSON.parse(response.body) || response.body
-
-
     controller = params['controller']
     action = params['action']
-
-
-    # FIXME: use .to_json rather than .to_s, because there might be some hacks parsing the log
     resp = ensure_within_text_length(resp.to_s)
-
     api_query_log = ApiQueryLog.create!(
         controller: controller,
         action: action,
@@ -104,17 +97,9 @@ class Api::V1::BaseController < ActionController::Base
         response: resp,
         status: status,
         )
-
     return if status == 200
-
     Rails.logger.info "#{controller}##{action}: #{status} #{error&.inspect}"
-
     return if status != 500
-
-    # logger.error(error)
-    # Rollbar.error(error)
-    # title = "HTTP 500 - #{controller}##{action} #{api_query_log.to_finder}"
-    # SlackHelper.devops.error resp, title: title
   end
 
   def ensure_within_text_length(text)
